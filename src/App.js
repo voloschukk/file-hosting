@@ -1,25 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { Component } from 'react';
+import Menu from './Menu';
+import Content from './Content';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const usersList = [{ id: 0, name: 'user1', email: 'user1@gmail.com', password: 'password1', group: 'admin' }];
+localStorage.setItem("usersList", JSON.stringify(usersList));
+
+<script src="http://localhost:8097"></script>
+
+class App extends Component {
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">
+          LOGO
+        </header>
+        <div className="main">
+          <div className="menu-bar">
+            <Menu />
+          </div>
+          <div className="contetnt-bar">
+            <Content />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
-export default App;
+export default App
