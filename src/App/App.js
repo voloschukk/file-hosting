@@ -1,7 +1,7 @@
 import './App.css';
 import React, { Component } from 'react';
-import Menu from './Menu';
-import Content from './Content';
+import Menu from '../Menu/Menu';
+import Content from '../Content/Content';
 
 const usersList = [{ id: 0, name: 'user1', email: 'user1@gmail.com', password: 'password1', group: 'admin' }];
 localStorage.setItem("usersList", JSON.stringify(usersList));
@@ -12,15 +12,15 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
+      <div className="container-md App">
+        <header className="row border p-2 border-primary ">
           LOGO
         </header>
-        <div className="main">
-          <div className="menu-bar">
+        <div className="row  p-2 border border-primary">
+          <div className="menu-bar p-2 border border-primary col col-3">
             <Menu />
           </div>
-          <div className="contetnt-bar">
+          <div className="contetnt-bar col col-9 ">
             <Content />
           </div>
         </div>

@@ -23,7 +23,7 @@ export default class Users extends Component {
                 id = this.state.usersList[i].id;
             }
         }
-        const user = { id: id+1, name: '', email: '', password: '', group: 'user' };
+        const user = { id: id + 1, name: '', email: '', password: '', group: 'user' };
         this.setState({ user: user, showModal: !this.state.showModal, addNewUser: true });
 
     }
@@ -59,16 +59,16 @@ export default class Users extends Component {
     }
 
     render() {
-        
+
         console.log('---- R users', 1)
         const usersList = this.state.usersList;
 
 
         const listItems = usersList.map((usersList) =>
             <tr>
-                <td>
+                <th scope="row">
                     {usersList.id}
-                </td>
+                </th>
                 <td>
                     {usersList.name}
                 </td>
@@ -82,7 +82,7 @@ export default class Users extends Component {
                     {usersList.group}
                 </td>
                 <td align="center">
-                    <button id={usersList.id.toString()} onClick={this.handleEditUser}>Edit</button>
+                    <button className="btn btn-outline-primary btn-sm" id={usersList.id.toString()} onClick={this.handleEditUser}>Edit</button>
                 </td>
             </tr>
         );
@@ -90,16 +90,24 @@ export default class Users extends Component {
         return (
             <div>
 
-                {this.state.showModal && <MyModal user={{...this.state.user}} saveUsersChanges={(user) => this.saveUsersChanges(user)} closeModal={this.closeModal} />}
-                <button onClick={this.handleAddUser}> ADD new user </button>
+                {this.state.showModal && <MyModal user={{ ...this.state.user }} saveUsersChanges={(user) => this.saveUsersChanges(user)} closeModal={this.closeModal} />}
+                <button className="btn btn-outline-primary btn-sm" onClick={this.handleAddUser}> ADD new user </button>
 
 
-                <table className="users-table">
+                <table className="table table-sm table-hover">
+
                     <caption>Users List</caption>
+                    <thead className="thead-light"></thead>
                     <tr>
-                        <th>Id</th><th>Name</th><th>Email</th><th>Password</th><th>Group</th><th>Edit</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Password</th>
+                        <th scope="col">Group</th>
+                        <th scope="col">Edit</th>
                     </tr>
-                    {listItems}
+                    <tbody>{listItems}</tbody>
+                    
                 </table>
             </div>
         )
