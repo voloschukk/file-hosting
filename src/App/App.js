@@ -2,17 +2,15 @@ import './App.css';
 import React, { Component } from 'react';
 import Menu from '../Menu/Menu';
 import Content from '../Content/Content';
+import { startData } from '../workWitDatabase';
 
-const usersList = [{ id: 0, name: 'user1', email: 'user1@gmail.com', password: 'password1', group: 'admin' }];
-localStorage.setItem("usersList", JSON.stringify(usersList));
-
-<script src="http://localhost:8097"></script>
+startData();
 
 class App extends Component {
 
   render() {
     return (
-      <div className="container-md App">
+      <div className="container-md h-100 App">
         <header className="row border p-2 border-primary ">
           LOGO
         </header>

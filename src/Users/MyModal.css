@@ -1,0 +1,29 @@
+.modal {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  padding: 20px;
+  border-radius: 12px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+
+.error {
+  height: 19px;
+  color: red !important;
+}
+
+.form-group {
+  margin-bottom: 0px;
+}
