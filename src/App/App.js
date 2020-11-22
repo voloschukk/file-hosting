@@ -2,9 +2,11 @@ import './App.css';
 import React, { Component } from 'react';
 import Menu from '../Menu/Menu';
 import Content from '../Content/Content';
-import { startData } from '../workWitDatabase';
+import { promiseStartData } from '../workWitDatabase';
 
-startData();
+// startData();
+
+promiseStartData.then();
 
 class App extends Component {
 

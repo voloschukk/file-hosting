@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import './Users.css';
+import React, { Component } from 'react';
 import MyModal from './MyModal';
-import { getDataFromServer, updateDataOnServer } from '../workWitDatabase';
+import { getDataFromServer, promiseGetDataFromServer, promiseUpdateDataOnServer} from '../workWitDatabase';
 
 export default class Users extends Component {
 
@@ -19,7 +20,8 @@ export default class Users extends Component {
 
     componentDidUpdate() {
         const usersList = this.state.usersList;
-        updateDataOnServer(usersList);
+        let promise = promiseUpdateDataOnServer(usersList);
+        promise.then();
     }
 
     handleAddUser = () => {
@@ -89,13 +91,15 @@ export default class Users extends Component {
                 <td>{usersList.password}</td>
                 <td>{usersList.group}</td>
                 <td align="center">
-                    <img alt="Edit"
+                    <img className ="pointer"
+                        alt="Edit"
                         src="https://img.icons8.com/ultraviolet/15/000000/edit.png"
                         id={usersList.id.toString()}
                         onClick={this.handleEditUser} />
                 </td>
                 <td align="center">
-                    <img alt="Delete"
+                    <img className ="pointer"
+                        alt="Delete"
                         src="https://img.icons8.com/ultraviolet/15/000000/waste.png"
                         id={usersList.id.toString()}
                         onClick={this.handleDeleteUser} />
