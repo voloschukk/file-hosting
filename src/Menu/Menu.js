@@ -7,7 +7,7 @@ class Menu extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            links: [{ name: 'Home', path: '/', className: 'list-group-item'},
+            links: [{ name: 'Home', path: '/', className: 'list-group-item active'},
             { name: 'Users', path: '/users', className: 'list-group-item'},
             { name: 'Menu2', path: '/menu2', className: 'list-group-item'},
             { name: 'Menu3', path: '/menu3', className: 'list-group-item'},
@@ -16,6 +16,18 @@ class Menu extends Component {
         this.changeActive = this.changeActive.bind(this);
 
     }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.userRole !== this.props.userRole) {
+            const listLinks = this.state.links;
+            listLinks.forEach(function (item, i, arr) {
+                item.className = "list-group-item";
+                if (item.name === 'Home') {item.className = "list-group-item active"}
+            });
+            this.setState({ links: listLinks });
+        }
+
+      }
 
     changeActive(event) {
         if (event.target.parentNode.nodeName === "LI") {
