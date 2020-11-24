@@ -7,13 +7,14 @@ class Menu extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            links: [{ name: 'Home', path: '/', className: 'list-group-item' },
-            { name: 'Users', path: '/users', className: 'list-group-item' },
-            { name: 'Menu2', path: '/menu2', className: 'list-group-item' },
-            { name: 'Menu3', path: '/menu3', className: 'list-group-item' },
-            { name: 'Menu4', path: '/menu4', className: 'list-group-item' }]
+            links: [{ name: 'Home', path: '/', className: 'list-group-item'},
+            { name: 'Users', path: '/users', className: 'list-group-item'},
+            { name: 'Menu2', path: '/menu2', className: 'list-group-item'},
+            { name: 'Menu3', path: '/menu3', className: 'list-group-item'},
+            { name: 'Menu4', path: '/menu4', className: 'list-group-item'}],
         };
         this.changeActive = this.changeActive.bind(this);
+
     }
 
     changeActive(event) {
@@ -27,7 +28,20 @@ class Menu extends Component {
     }
 
     render() {
+        console.log('----- Menu')
+
         const links = this.state.links;
+
+        if (this.props.userRole !== 'admin') {
+            for (let i = 0; i < links.length; i++) {
+                if (links[i].name === 'Users') {
+                    //links.splice(i, 1);
+                    links[i].className = links[i].className + " hide";
+                    break;
+                }
+            }
+        }
+
         const listLinks = links.map((links) =>
             <li className={links.className} onClick={this.changeActive}><Link to={links.path}>{links.name}</Link></li>
         );

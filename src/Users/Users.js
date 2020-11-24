@@ -48,13 +48,14 @@ export default class Users extends Component {
         if (conf) {
             console.log('---- handleDeleteUser', 1)
             const usersList = this.state.usersList;
-            const user = usersList[event.target.id];
-            const ind = usersList.indexOf(user);
-            console.log(ind)
-            console.log(usersList)
-            usersList.splice(ind, 1);
-            console.log(usersList)
-            this.setState({ usersList: usersList });
+            
+            for (let i = 0; i < usersList.length; i++) {
+                if (usersList[i].id.toString() === event.target.id.toString()) {  
+                    usersList.splice(i, 1);
+                    this.setState({ usersList: usersList });
+                    break;
+                }
+            }
         }
     }
 
@@ -81,7 +82,7 @@ export default class Users extends Component {
     }
 
     render() {
-        console.log(this.state.usersList)
+        console.log('----- Users')
         const usersList = this.state.usersList;
         const listItems = usersList.map((usersList) =>
             <tr>

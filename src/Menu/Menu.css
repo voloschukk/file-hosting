@@ -1,3 +1,7 @@
 .list-group-item.active > a {
     color: white;
   }
+
+  .hide {
+    display: none;
+ }
