@@ -1,7 +1,8 @@
 import './Users.css';
 import React, { Component } from 'react';
 import MyModal from './MyModal';
-import { getDataFromServer, promiseGetDataFromServer, promiseUpdateDataOnServer} from '../workWitDatabase';
+import { getDataFromServer, promiseGetDataFromServer, promiseUpdateDataOnServer } from '../../services/workWithDatabase';
+import User from './User'
 
 export default class Users extends Component {
 
@@ -48,9 +49,9 @@ export default class Users extends Component {
         if (conf) {
             console.log('---- handleDeleteUser', 1)
             const usersList = this.state.usersList;
-            
+
             for (let i = 0; i < usersList.length; i++) {
-                if (usersList[i].id.toString() === event.target.id.toString()) {  
+                if (usersList[i].id.toString() === event.target.id.toString()) {
                     usersList.splice(i, 1);
                     this.setState({ usersList: usersList });
                     break;
@@ -85,34 +86,18 @@ export default class Users extends Component {
         console.log('----- Users')
         const usersList = this.state.usersList;
         const listItems = usersList.map((usersList) =>
-            <tr>
-                <th scope="row">{usersList.id}</th>
-                <td>{usersList.name}</td>
-                <td>{usersList.email} </td>
-                <td>{usersList.password}</td>
-                <td>{usersList.group}</td>
-                <td align="center">
-                    <img className ="pointer"
-                        alt="Edit"
-                        src="https://img.icons8.com/ultraviolet/15/000000/edit.png"
-                        id={usersList.id.toString()}
-                        onClick={this.handleEditUser} />
-                </td>
-                <td align="center">
-                    <img className ="pointer"
-                        alt="Delete"
-                        src="https://img.icons8.com/ultraviolet/15/000000/waste.png"
-                        id={usersList.id.toString()}
-                        onClick={this.handleDeleteUser} />
-                </td>
-            </tr>
+            <User usersList={usersList} handleDeleteUser={this.handleDeleteUser} handleEditUser={this.handleEditUser} />
         );
 
         return (
             <div>
-                {this.state.showModal && <MyModal showModal={this.state.showModal} user={{ ...this.state.user }} saveUsersChanges={(user) => this.saveUsersChanges(user)} closeModal={this.closeModal} />}
+                {this.state.showModal && <MyModal
+                    showModal={this.state.showModal}
+                    user={{ ...this.state.user }}
+                    saveUsersChanges={(user) => this.saveUsersChanges(user)}
+                    closeModal={this.closeModal} />}
                 <button className="btn btn-outline-primary btn-sm mb-2" onClick={this.handleAddUser}> ADD new user </button>
-                <table className="table table-bordered table-sm table-hover">
+                {/* <table className="table table-bordered table-sm table-hover">
                     <caption>Users List</caption>
                     <thead className="thead-light"></thead>
                     <tr>
@@ -125,7 +110,20 @@ export default class Users extends Component {
                         <th scope="col">Delete</th>
                     </tr>
                     <tbody>{listItems}</tbody>
-                </table>
+                </table> */}
+
+                <div class="d-flex flex-row bd-highlight border">
+                    <div class="p-2 w-10 bd-highlight">Id</div>
+                    <div class="p-2 flex-fill bd-highlight">Name</div>
+                    <div class="p-2 flex-fill bd-highlight">Email</div>
+                    <div class="p-2 flex-fill bd-highlight">Password</div>
+                    <div class="p-2 flex-fill bd-highlight">Group</div>
+                    <div class="p-2 w-20 bd-highlight justify-content-center">Edit</div>
+                    <div class="p-2 w-20 bd-highlight">Delete</div>
+                </div>
+                {listItems}
+
+
             </div>
         )
     }

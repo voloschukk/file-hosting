@@ -9,7 +9,7 @@ class Menu extends Component {
         this.state = {
             links: [{ name: 'Home', path: '/', className: 'list-group-item'},
             { name: 'Users', path: '/users', className: 'list-group-item'},
-            { name: 'Menu2', path: '/menu2', className: 'list-group-item'},
+            { name: 'UserData', path: '/userdata', className: 'list-group-item'},
             { name: 'Menu3', path: '/menu3', className: 'list-group-item'},
             { name: 'Menu4', path: '/menu4', className: 'list-group-item'}],
         };
@@ -73,7 +73,8 @@ class Menu extends Component {
             <div>
                 <nav>
                     <ul className="nav flex-column list-group-flush">
-                        {listLinks}
+                        {this.props.isLogIn && listLinks}
+                        {!this.props.isLogIn && <li className="list-group-item active" onClick={this.changeActive}><Link to='/'>LogIn</Link></li>}
                     </ul>
                 </nav>
             </div>

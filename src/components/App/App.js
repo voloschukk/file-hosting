@@ -2,11 +2,11 @@ import './App.css';
 import React, { Component } from 'react';
 import Menu from '../Menu/Menu';
 import Content from '../Content/Content';
-import { promiseStartData } from '../workWitDatabase';
+import { startData , promiseStartData } from '../../services/workWithDatabase';
 
-// startData();
+ startData();
 
-promiseStartData.then();
+//promiseStartData.then();
 
 class App extends Component {
 
@@ -55,7 +55,7 @@ class App extends Component {
             <Menu userRole={this.state.userRole} isLogIn={this.state.isLogIn} />
           </div>
           <div className="contetnt-bar col col-9 ">
-            <Content userRole={this.state.userRole} isLogIn={this.state.isLogIn} tryLogin={(userEmail, userPassword) => this.tryLogin(userEmail, userPassword)} />
+            <Content user={this.state.user} isLogIn={this.state.isLogIn} tryLogin={(userEmail, userPassword) => this.tryLogin(userEmail, userPassword)} />
           </div>
         </div>
       </div>
