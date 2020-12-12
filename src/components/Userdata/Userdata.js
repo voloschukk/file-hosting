@@ -6,18 +6,33 @@ import FileHeader from './FileHeader'
 import DragAndDrop from './DragAndDrop'
 
 export default class Userdata extends Component {
+
     constructor(props) {
         super(props);
-        this.state = { files: getFilesFromServer(this.props.user.id, this.props.trash), view: getView(), checkedFilesID: [] };
+        
         this.onSelectFileHandler = this.onSelectFileHandler.bind(this);
         this.changeView = this.changeView.bind(this);
         this.deleteFile = this.deleteFile.bind(this);
         this.restoreFile = this.restoreFile.bind(this);
     }
 
+    state = {
+        files:[]
+    }
+
     componentWillUnmount() {
         console.log('componentWillUnmount');
     };
+
+    componentDidMount(){
+        debugger
+      
+    }
+    componentDidUpdate(prevProps){
+        if(prevProps.trash != this.props.trash) {
+            this.setState({files: getFilesFromServer(this.props.user.id, this.props.trash), view: getView(), checkedFilesID: []})
+        }
+    }
 
     checkFile(id, checked) {
         let checkedFilesID = this.state.checkedFilesID;
@@ -85,11 +100,17 @@ export default class Userdata extends Component {
 
     render() {
 
-        const files = this.state.files;
+        const { files } = this.state;
+        let filesItems = [] ;
+        if(files)
+        {
+            filesItems = files.map((files) =>
+                <File file={files} view={this.state.view} trash={this.props.trash} renameFile={(file) => this.renameFile(file)} checkFile={(id, checked) => this.checkFile(id, checked)} />
+            );
+        }
+        else{
 
-        const filesItems = files.map((files) =>
-            <File file={files} view={this.state.view} trash={this.props.trash} renameFile={(file) => this.renameFile(file)} checkFile={(id, checked) => this.checkFile(id, checked)} />
-        );
+        }
 
         const filesGrid = this.state.view === "tiles" ? "files-grid-tiles" : "files-grid-details";
 

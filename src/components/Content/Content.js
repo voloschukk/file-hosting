@@ -20,8 +20,14 @@ export default class Content extends Component {
                     <Switch>
                         <Route exact path='/' component={Home} />
                         {isAdmin && <Route path='/users' component={Users} />}
-                        <Route path='/userdata' render={(props) => <Userdata {...props} user={user} trash={false} />} />
-                        <Route path='/trash' render={(props) => <Userdata {...props} user={user} trash={true} />} />
+                        <Route path='/userdata' render={(props) => {
+                            console.log('222')
+                            return <Userdata {...props} user={user} trash={false} />} 
+                        }/>
+                        <Route path='/trash' render={(props) =>{
+                            console.log('11111')
+                            return <Userdata {...props} user={user} trash={true} />}
+                         } />
                         <Route path='/menu4' component={null} />
                     </Switch>
                 }
