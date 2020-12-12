@@ -41,20 +41,20 @@ class App extends Component {
   render() {
     console.log('----- App')
     return (
-      <div className="container-md h-100 App">
+      <div className="container-xl">
         <header className="row border p-2 border-primary ">
           LOGO
         </header>
-        <div className="row border border-primary ">
+        <div className="row border border-primary user-row">
           {!this.state.isLogIn && <label className="m-2">Hello, guest</label>}
           {this.state.isLogIn && <label className="m-2">Hello, {this.state.user.name}</label>}
           {this.state.isLogIn && <button className="btn btn-outline-primary btn-sm ml-1" onClick={this.handleLogOut}> LogOut </button>}
         </div>
-        <div className="row  p-2 border border-primary">
-          <div className="menu-bar p-2 border border-primary col col-3">
+        <div className="row p-2 border border-primary main-row">
+          <div className="col col-3 p-2 border border-primary">
             <Menu userRole={this.state.userRole} isLogIn={this.state.isLogIn} />
           </div>
-          <div className="contetnt-bar col col-9 ">
+          <div className="col col-9">
             <Content user={this.state.user} isLogIn={this.state.isLogIn} tryLogin={(userEmail, userPassword) => this.tryLogin(userEmail, userPassword)} />
           </div>
         </div>

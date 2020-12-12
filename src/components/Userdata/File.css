@@ -1,0 +1,78 @@
+.tiles-main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 150px;
+  height: 150px;
+  border: 1px solid blue;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 5px;
+}
+
+.tiles-name-row-noedit {
+  height: 31px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  line-height: 31px;
+}
+
+.tiles-name-row-edit {
+  height: 31px;
+}
+
+.pointer {
+  margin: 2px;
+}
+
+.input-name {
+  display: inline;
+  width: 90px;
+  margin-left: 0px;
+  padding: 4px;
+}
+
+.details-main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid blue;
+  border-radius: 5px;
+  margin: 2px;
+  padding: 5px;
+}
+
+.details-items-name {
+  flex: 0 1 40%;
+  display: flex;
+  flex-direction: row;
+}
+
+.details-items-date {
+  flex: 0 1 20%;
+}
+
+.details-items-creater {
+  flex: 0 1 20%;
+}
+
+.details-items-size {
+  flex: 0 1 20%;
+}
+
+.file-header {
+  border: 2px dotted blue;
+}
+
+.tiles-form-check {
+  align-self: flex-start;
+}
+
+.details-form-check {
+  margin-right: 2px;
+}

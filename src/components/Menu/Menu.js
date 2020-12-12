@@ -10,7 +10,7 @@ class Menu extends Component {
             links: [{ name: 'Home', path: '/', className: 'list-group-item'},
             { name: 'Users', path: '/users', className: 'list-group-item'},
             { name: 'UserData', path: '/userdata', className: 'list-group-item'},
-            { name: 'Menu3', path: '/menu3', className: 'list-group-item'},
+            { name: 'Trash', path: '/trash', className: 'list-group-item'},
             { name: 'Menu4', path: '/menu4', className: 'list-group-item'}],
         };
         this.changeActive = this.changeActive.bind(this);

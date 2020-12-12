@@ -1,0 +1,33 @@
+.filecontainer{
+    width: 100px;
+    
+}
+
+.user-data{
+    display: block;
+    height: 100% ;
+}
+
+.files-grid-tiles{
+    display: flex ;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.files-grid-details{
+    display: flex ;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.control-row{
+    height: 50px;
+}
+
+.data-row{
+    height: calc(100% - 50px);
+}

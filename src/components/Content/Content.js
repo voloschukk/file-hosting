@@ -12,26 +12,24 @@ export default class Content extends Component {
         let isAdmin = false;
         this.props.user.group === 'admin' ? isAdmin = true : isAdmin = false;
         const user = this.props.user;
-        
+
 
         return (
-            <div>
+            <div className="height100">
                 {this.props.isLogIn &&
-                    <main>
-                        <Switch>
-                            <Route exact path='/' component={Home} />
-                            {isAdmin && <Route path='/users' component={Users} />}
-                            <Route path='/userdata' render={(props) => <Userdata {...props} user={user} />} />
-                            <Route path='/menu3' component={null} />
-                            <Route path='/menu4' component={null} />
-                        </Switch>
-                    </main>}
+                    <Switch>
+                        <Route exact path='/' component={Home} />
+                        {isAdmin && <Route path='/users' component={Users} />}
+                        <Route path='/userdata' render={(props) => <Userdata {...props} user={user} trash={false} />} />
+                        <Route path='/trash' render={(props) => <Userdata {...props} user={user} trash={true} />} />
+                        <Route path='/menu4' component={null} />
+                    </Switch>
+                }
                 {!this.props.isLogIn &&
-                    <main>
-                        <Switch>
-                            <Route path='/' render={(props) => <Login {...props} tryLogin={(userEmail, userPassword) => this.props.tryLogin(userEmail, userPassword)}/>} />
-                        </Switch>
-                    </main>}
+                    <Switch>
+                        <Route path='/' render={(props) => <Login {...props} tryLogin={(userEmail, userPassword) => this.props.tryLogin(userEmail, userPassword)} />} />
+                    </Switch>
+                }
 
 
             </div>
