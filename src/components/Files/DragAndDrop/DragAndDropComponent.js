@@ -1,14 +1,18 @@
-import './DragAndDrop.css'
+import './DragAndDropComponent.css'
 import React, { Component } from 'react'
-class DragAndDrop extends Component {
+
+export default class DragAndDropComponent extends Component {
+
   state = {
     drag: false
   }
+
   dropRef = React.createRef()
   handleDrag = (e) => {
     e.preventDefault()
     e.stopPropagation()
   }
+
   handleDragIn = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -17,6 +21,7 @@ class DragAndDrop extends Component {
       this.setState({ drag: true })
     }
   }
+
   handleDragOut = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -25,6 +30,7 @@ class DragAndDrop extends Component {
       this.setState({ drag: false })
     }
   }
+
   handleDrop = (e) => {
     e.preventDefault()
     e.stopPropagation()
@@ -35,6 +41,7 @@ class DragAndDrop extends Component {
       this.dragCounter = 0
     }
   }
+
   componentDidMount() {
     let div = this.dropRef.current
     div.addEventListener('dragenter', this.handleDragIn)
@@ -42,6 +49,7 @@ class DragAndDrop extends Component {
     div.addEventListener('dragover', this.handleDrag)
     div.addEventListener('drop', this.handleDrop)
   }
+
   componentWillUnmount() {
     let div = this.dropRef.current
     div.removeEventListener('dragenter', this.handleDragIn)
@@ -49,6 +57,7 @@ class DragAndDrop extends Component {
     div.removeEventListener('dragover', this.handleDrag)
     div.removeEventListener('drop', this.handleDrop)
   }
+  
   render() {
     return (
       <div className="container-drag" ref={this.dropRef}>
@@ -64,4 +73,3 @@ class DragAndDrop extends Component {
     )
   }
 }
-export default DragAndDrop

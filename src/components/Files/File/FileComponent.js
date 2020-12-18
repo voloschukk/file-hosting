@@ -1,7 +1,7 @@
-import './File.css';
+import './FileComponent.css';
 import React, { Component } from 'react'
 
-export default class File extends Component {
+export default class FileComponent extends Component {
 
     constructor(props) {
         super(props);

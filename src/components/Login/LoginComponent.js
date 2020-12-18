@@ -1,7 +1,7 @@
+import './LoginComponent.css';
 import React, { Component } from 'react'
-import './Login.css';
 
-export default class Login extends Component {
+export default class LoginComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -30,7 +30,6 @@ export default class Login extends Component {
     }
 
     render() {
-        console.log('----- Login')
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>

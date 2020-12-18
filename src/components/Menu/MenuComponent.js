@@ -1,26 +1,26 @@
-import './Menu.css';
+import './MenuComponent.css';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-class Menu extends Component {
+export default class MenuComponent extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            links: [{ name: 'Home', path: '/', className: 'list-group-item'},
-            { name: 'Users', path: '/users', className: 'list-group-item'},
-            { name: 'My Data', path: '/my-data', className: 'list-group-item'},
-            { name: 'Trash', path: '/trash', className: 'list-group-item'},
-            { name: 'Menu4', path: '/menu4', className: 'list-group-item'}],
+            links: [{ name: 'Home', path: '/', className: 'list-group-item' },
+            { name: 'Users', path: '/users', className: 'list-group-item' },
+            { name: 'My Data', path: '/my-data', className: 'list-group-item' },
+            { name: 'Trash', path: '/trash', className: 'list-group-item' },
+            { name: 'Menu4', path: '/menu4', className: 'list-group-item' }],
         };
         this.changeActive = this.changeActive.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         const listLinks = this.state.links;
         listLinks.forEach(function (item, i, arr) {
             item.className = "list-group-item";
-            if (item.path === window.location.pathname) {item.className = "list-group-item active"}
+            if (item.path === window.location.pathname) { item.className = "list-group-item active" }
         });
         this.setState({ links: listLinks });
     }
@@ -30,14 +30,11 @@ class Menu extends Component {
             const listLinks = this.state.links;
             listLinks.forEach(function (item, i, arr) {
                 item.className = "list-group-item";
-                if (item.path === window.location.pathname) {item.className = "list-group-item active"}
+                if (item.path === window.location.pathname) { item.className = "list-group-item active" }
             });
             this.setState({ links: listLinks });
         }
-
-
-
-      }
+    }
 
     changeActive(event) {
         if (event.target.parentNode.nodeName === "LI") {
@@ -50,10 +47,7 @@ class Menu extends Component {
     }
 
     render() {
-        console.log('----- Menu')
-
         const links = this.state.links;
-
         if (this.props.userRole !== 'admin') {
             for (let i = 0; i < links.length; i++) {
                 if (links[i].name === 'Users') {
@@ -80,5 +74,3 @@ class Menu extends Component {
         )
     }
 }
-
-export default Menu

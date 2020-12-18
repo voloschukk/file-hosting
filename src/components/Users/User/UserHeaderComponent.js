@@ -1,7 +1,7 @@
+import './UserComponent.css';
 import React, { Component } from 'react'
-import './Users.css';
 
-export default class UsersHeader extends Component {
+export default class UserHeaderComponent extends Component {
     render() {
         return (
             <div className="details-main-container file-header">

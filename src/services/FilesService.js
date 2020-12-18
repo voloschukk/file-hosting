@@ -1,3 +1,19 @@
+export function initFilesData() {
+  localStorage.setItem("files", JSON.stringify([
+    { id: 0, name: 'file1', trash: false, path: '', type: '', createDate: new Date(), creater: 0, size: 1111111, lastModified: 1 },
+    { id: 1, name: 'file2', trash: false, path: '', type: '', createDate: new Date(), creater: 1, size: 22222, lastModified: 2 },
+    { id: 2, name: 'file3', trash: true, path: '', type: '', createDate: new Date(), creater: 2, size: 3333, lastModified: 3 }]));
+  localStorage.setItem("usersAndFiles", JSON.stringify([
+    { userId: 0, fileId: 0 },
+    { userId: 0, fileId: 1 },
+    { userId: 1, fileId: 0 },
+    { userId: 1, fileId: 1 },
+    { userId: 1, fileId: 2 },
+    { userId: 2, fileId: 2 }]));
+  localStorage.setItem("view", "tiles")
+}
+
+
 export function getFiles(id, tarsh) {
   const files = JSON.parse(localStorage.getItem("files"));
   const usersAndFiles = JSON.parse(localStorage.getItem("usersAndFiles"));

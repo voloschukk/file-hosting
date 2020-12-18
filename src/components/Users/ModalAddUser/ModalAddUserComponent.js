@@ -1,9 +1,7 @@
-import './MyModal.css';
+import './ModalAddUserComponent.css';
 import React, { Component } from 'react'
 
-<script src="http://localhost:8097"></script>
-
-export default class MyModal extends Component {
+export default class ModalAddUserComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -23,7 +21,6 @@ export default class MyModal extends Component {
     }
 
     handleChange(event) {
-        console.log('---- handleChange', 2)
         const user = this.state.user;
         user[event.target.name] = event.target.value;
         this.setState({ user: user },

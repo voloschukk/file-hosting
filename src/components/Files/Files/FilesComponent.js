@@ -1,11 +1,11 @@
-import './Files.css';
+import './FilesComponent.css';
 import React, { Component } from 'react'
-import { getFiles, changeFile, addFile, setView, getView, deleteFilesToTrash, restoreFilesFromTrash } from '../../services/FilesService'
-import File from './File'
-import FileHeader from './FileHeader'
-import DragAndDrop from './DragAndDrop'
+import { getFiles, changeFile, addFile, setView, getView, deleteFilesToTrash, restoreFilesFromTrash } from '../../../services/FilesService'
+import FileComponent from '../File/FileComponent'
+import FileHeaderComponent from '../File/FileHeaderComponent'
+import DragAndDropComponent from '../DragAndDrop/DragAndDropComponent'
 
-export default class Files extends Component {
+export default class FilesComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -22,8 +22,6 @@ export default class Files extends Component {
         view: getView(),
         allCheked: false
     }
-
-
 
     componentDidMount() {
         console.log('---Files componentDidMount');
@@ -122,7 +120,7 @@ export default class Files extends Component {
         let filesItems = [];
         if (files) {
             filesItems = files.map((files) =>
-                <File file={files} view={this.state.view} enableRenameFile={this.props.enableRenameFile} renameFile={(file) => this.renameFile(file)} checkFile={(id, checked) => this.checkFile(id, checked)} />
+                <FileComponent file={files} view={this.state.view} enableRenameFile={this.props.enableRenameFile} renameFile={(file) => this.renameFile(file)} checkFile={(id, checked) => this.checkFile(id, checked)} />
             );
         }
         else {
@@ -168,15 +166,15 @@ export default class Files extends Component {
                 </div>
                 <div className="row data-row">
                     {this.props.enableAddFile &&
-                        <DragAndDrop handleDrop={this.handleDrop}>
+                        <DragAndDropComponent handleDrop={this.handleDrop}>
                             <div className={filesGrid}>
-                                {this.state.view === "details" && <FileHeader />}
+                                {this.state.view === "details" && <FileHeaderComponent />}
                                 {filesItems}
                             </div>
-                        </DragAndDrop>}
+                        </DragAndDropComponent>}
                     {!this.props.enableAddFile &&
                         <div className={filesGrid}>
-                            {this.state.view === "details" && <FileHeader />}
+                            {this.state.view === "details" && <FileHeaderComponent />}
                             {filesItems}
                         </div>}
                 </div>

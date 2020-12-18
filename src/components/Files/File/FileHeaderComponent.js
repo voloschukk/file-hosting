@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import './File.css';
+import './FileComponent.css';
 
-export default class FileHeader extends Component {
+export default class FileHeaderComponent extends Component {
     render() {
         return (
             <div className="details-main-container file-header">

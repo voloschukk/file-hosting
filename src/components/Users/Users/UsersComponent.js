@@ -1,11 +1,11 @@
-import './Users.css';
+import './UsersComponent.css';
 import React, { Component } from 'react';
-import MyModal from './MyModal';
-import { getUsersData, promiseUpdateUsersData } from '../../services/UsersService';
-import User from './User'
-import UsersHeader from './UsersHeader'
+import { getUsersData, promiseUpdateUsersData } from '../../../services/UsersService';
+import ModalAddUserComponent from '../ModalAddUser/ModalAddUserComponent';
+import UserComponent from '../User/UserComponent'
+import UserHeaderComponent from '../User/UserHeaderComponent'
 
-export default class Users extends Component {
+export default class UsersComponent extends Component {
 
     constructor(props) {
         super(props);
@@ -80,18 +80,18 @@ export default class Users extends Component {
     render() {
         const usersList = this.state.usersList;
         const listItems = usersList.map((usersList) =>
-            <User usersList={usersList} handleDeleteUser={this.handleDeleteUser} handleEditUser={this.handleEditUser} />
+            <UserComponent usersList={usersList} handleDeleteUser={this.handleDeleteUser} handleEditUser={this.handleEditUser} />
         );
 
         return (
             <div>
-                {this.state.showModal && <MyModal
+                {this.state.showModal && <ModalAddUserComponent
                     showModal={this.state.showModal}
                     user={{ ...this.state.user }}
                     saveUsersChanges={(user) => this.saveUsersChanges(user)}
                     closeModal={this.closeModal} />}
                 <button className="btn btn-outline-primary btn-sm mb-2" onClick={this.handleAddUser}> ADD new user </button>
-                <UsersHeader />
+                <UserHeaderComponent />
                 {listItems}
             </div>
         )
