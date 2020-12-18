@@ -1,3 +1,46 @@
-.pointer:hover { 
-    cursor: pointer; 
+.pointer:hover {
+  cursor: pointer;
+}
+
+.details-main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  border: 1px solid blue;
+  border-radius: 5px;
+  margin: 2px;
+  padding: 5px;
+}
+
+.details-items-id {
+  flex: 0 1 6%;
+}
+
+.details-items-name {
+  flex: 0 1 10%;
+}
+
+.details-items-email {
+  flex: 0 1 25%;
+}
+
+.details-items-password {
+  flex: 0 1 25%;
+}
+
+.details-items-group {
+  flex: 0 1 15%;
+}
+
+.details-items-edit {
+  flex: 0 1 8%;
+}
+
+.details-items-delete {
+  flex: 0 1 8%;
+}
+
+.file-header {
+  border: 2px dotted blue;
 }

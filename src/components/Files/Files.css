@@ -31,3 +31,8 @@
 .data-row{
     height: calc(100% - 50px);
 }
+
+.flex-centre{
+    display: flex;
+    align-items: center;
+}

@@ -2,7 +2,7 @@ import './App.css';
 import React, { Component } from 'react';
 import Menu from '../Menu/Menu';
 import Content from '../Content/Content';
-import { startData , promiseStartData } from '../../services/workWithDatabase';
+import { startData , promiseStartData } from '../../services/StartDataService';
 
  startData();
 

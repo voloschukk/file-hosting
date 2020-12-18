@@ -26,7 +26,7 @@
 }
 
 .pointer {
-  margin: 2px;
+  margin: 0px 2px 0px 2px;
 }
 
 .input-name {
@@ -47,10 +47,19 @@
   padding: 5px;
 }
 
+.details-name-row-edit{
+  height: 24px;
+}
+
+.details-input-name{
+  height: 24px;
+}
+
 .details-items-name {
   flex: 0 1 40%;
   display: flex;
   flex-direction: row;
+  
 }
 
 .details-items-date {

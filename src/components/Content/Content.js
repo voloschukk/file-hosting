@@ -3,12 +3,11 @@ import { Switch, Route } from 'react-router-dom';
 import Home from '../Home/Home';
 import Users from '../Users/Users';
 import Login from '../Login/Login';
-import Userdata from '../Userdata/Userdata';
+import Files from '../Files/Files';
 
 export default class Content extends Component {
 
     render() {
-        console.log('----- Content')
         let isAdmin = false;
         this.props.user.group === 'admin' ? isAdmin = true : isAdmin = false;
         const user = this.props.user;
@@ -20,14 +19,14 @@ export default class Content extends Component {
                     <Switch>
                         <Route exact path='/' component={Home} />
                         {isAdmin && <Route path='/users' component={Users} />}
-                        <Route path='/userdata' render={(props) => {
-                            console.log('222')
-                            return <Userdata {...props} user={user} trash={false} />} 
-                        }/>
-                        <Route path='/trash' render={(props) =>{
-                            console.log('11111')
-                            return <Userdata {...props} user={user} trash={true} />}
-                         } />
+                        <Route path='/my-data' render={(props) => {
+                            return <Files {...props} user={user} isTrash={false} enableAddFile={true} enableRenameFile={true}/>
+                        }
+                        } />
+                        <Route path='/trash' render={(props) => {
+                            return <Files {...props} user={user} isTrash={true} enableAddFile={false} enableRenameFile={false}/>
+                        }
+                        } />
                         <Route path='/menu4' component={null} />
                     </Switch>
                 }

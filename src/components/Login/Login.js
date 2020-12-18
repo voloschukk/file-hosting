@@ -1,36 +1,41 @@
 import React, { Component } from 'react'
+import './Login.css';
 
 export default class Login extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {userEmail: '', userPassword: ''};
+        this.state = { userEmail: '', userPassword: '' };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
-    
+    state = {
+        isWrongUserData: false
+    }
+
     handleChange(event) {
         if (event.target.name === 'userEmail') {
-            this.setState ({ userEmail: event.target.value});
+            this.setState({ userEmail: event.target.value });
         }
         if (event.target.name === 'userPassword') {
-            this.setState({userPassword: event.target.value});
+            this.setState({ userPassword: event.target.value });
         }
     }
 
-    handleSubmit(event){
+    handleSubmit(event) {
+        this.setState({isWrongUserData: true});
         this.props.tryLogin(this.state.userEmail, this.state.userPassword);
         event.preventDefault();
     }
-    
+
     render() {
         console.log('----- Login')
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
-                        <label for="inputEmail">Email address</label>
+                        <label for="inputEmail">Email address {this.state.isWrongUserData && <span className="red">- Incorrect login or password</span>}</label>
                         <input type="text" name='userEmail' value={this.state.userEmail} onChange={this.handleChange} className="form-control" id="inputEmail" aria-describedby="emailHelp" />
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
