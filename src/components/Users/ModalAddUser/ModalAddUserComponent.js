@@ -1,28 +1,36 @@
 import './ModalAddUserComponent.css';
+import { getUsersData } from '../../../services/UsersService';
 import React, { Component } from 'react'
 
 export default class ModalAddUserComponent extends Component {
 
     constructor(props) {
         super(props);
-        this.state = { user: { password2: props.user.password, ...props.user }, password2: props.user.password, formErrors: { name: '', email: '', password: '', password2: '' }, isValidForm: false };
+        this.state = {
+            user: { password2: props.user.password, ...props.user },
+            password2: props.user.password,
+            formErrors: { name: '', email: '', password: '', password2: '' },
+            isValidForm: false,
+            usersList: []
+        };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         let isValid = true;
         for (let key in this.state.user) {
             if (this.state.user[key] === '') {
                 isValid = false;
             };
         }
-        this.setState({isValidForm: isValid });
+        this.setState({ isValidForm: isValid, usersList: getUsersData() });
     }
 
     handleChange(event) {
         const user = this.state.user;
         user[event.target.name] = event.target.value;
+        if (event.target.name === 'access') {user[event.target.name] = event.target.value === "true" ? true : false}
         this.setState({ user: user },
             () => { this.validateField(event.target.name, event.target.value) });
     }
@@ -34,10 +42,24 @@ export default class ModalAddUserComponent extends Component {
             case 'name':
                 isValid = value.length >= 4;
                 fieldValidationErrors.name = isValid ? '' : '! too short';
+                if (fieldValidationErrors.name === '') {
+                    this.state.usersList.forEach((item) => {
+                        if (item.name === value) {
+                            fieldValidationErrors.name = "such name already exists";
+                        }
+                    })
+                }
                 break;
             case 'email':
                 isValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
                 fieldValidationErrors.email = isValid ? '' : '! invalid';
+                if (fieldValidationErrors.email === '') {
+                    this.state.usersList.forEach((item) => {
+                        if (item.email === value) {
+                            fieldValidationErrors.email = "such email already exists";
+                        }
+                    })
+                }
                 break;
             case 'password':
                 isValid = value.length >= 8;
@@ -68,8 +90,18 @@ export default class ModalAddUserComponent extends Component {
     }
 
     handleSubmit(event) {
-        const user = this.state.user;
+        let { user, usersList } = this.state;
         delete user.password2;
+        if (user.id === null) {
+            let id = 0;
+            for (let i = 0; i < usersList.length; i++) {
+                if (usersList[i].id > id) {
+                    id = usersList[i].id;
+                }
+            }
+            id = id + 1;
+            user.id = id;
+        }
         this.props.saveUsersChanges(user)
     }
 
@@ -88,15 +120,7 @@ export default class ModalAddUserComponent extends Component {
                             <input type="email" className="form-control form-control-sm" name="email" value={this.state.user.email} onChange={this.handleChange} id="inputEmail" aria-describedby="emailHelp" />
                             <small id="emailHelp" className="form-text text-muted error">{this.state.formErrors.email}</small>
                         </div>
-                        <div className="form-group">
-                            <label for="inputGroup">Group</label>
-                            <select className="custom-select form-control-sm" value={this.state.user.group} name="group" onChange={this.handleChange} id="inputGroup" >
-                                <option value="admin">Admin</option>
-                                <option value="moderator">Moderator</option>
-                                <option value="user">User</option>
-                            </select>
-                            <div className="error"></div>
-                        </div>
+
                         <div className="form-group">
                             <label for="inputPassword">Password</label>
                             <input type="text" className="form-control form-control-sm" name="password" value={this.state.user.password} onChange={this.handleChange} id="inputPassword" aria-describedby="passwordHelp" />
@@ -107,6 +131,27 @@ export default class ModalAddUserComponent extends Component {
                             <input type="text" className="form-control form-control-sm" name="password2" value={this.state.user.password2} onChange={this.handleChange} id="inputPassword2" aria-describedby="passwordHelp" />
                             <small id="passwordHelp" className="form-text text-muted error">{this.state.formErrors.password2}</small>
                         </div>
+                        {this.props.enableGroup &&
+                            <div className="form-group">
+                                <label for="inputGroup">Group</label>
+                                <select className="custom-select form-control-sm" value={this.state.user.group} name="group" onChange={this.handleChange} id="inputGroup" >
+                                    <option value="admin">Admin</option>
+                                    <option value="moderator">Moderator</option>
+                                    <option value="user">User</option>
+                                </select>
+                                <div className="error"></div>
+                            </div>}
+                        {this.props.enableAccess &&
+                            <div className="form-group">
+                                <label for="inputAccess">Access</label>
+                                <select className="custom-select form-control-sm" value={this.state.user.access.toString()} name="access" onChange={this.handleChange} id="inputAccess" >
+                                    <option value="true">Access</option>
+                                    <option value="false">No Access</option>
+                                </select>
+                                <div className="error"></div>
+                            </div>}
+
+
                         <input disabled={!this.state.isValidForm} className="btn btn-primary m-1" type="submit" value="Submit" />
                         <button className="btn btn-primary m-1" onClick={this.props.closeModal}>Cancel</button>
                     </form>

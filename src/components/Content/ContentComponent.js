@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import HomeComponent from '../Home/HomeComponent';
-import UsersComponent from '../Users/Users/UsersComponent';
 import LoginComponent from '../Login/LoginComponent';
+import UsersComponent from '../Users/Users/UsersComponent';
 import FilesComponent from '../Files/Files/FilesComponent';
+import SettingComponent from '../Setting/SettingComponent';
 
 export default class ContentComponent extends Component {
 
@@ -26,12 +27,15 @@ export default class ContentComponent extends Component {
                             return <FilesComponent {...props} user={user} isTrash={true} enableAddFile={false} enableRenameFile={false} />
                         }
                         } />
-                        <Route path='/menu4' component={null} />
+                        <Route path='/setting' render={(props) => {
+                            return <SettingComponent {...props} user={user} logOut={this.props.logOut} />
+                        }
+                        }/>
                     </Switch>
                 }
                 {!this.props.isLogIn &&
                     <Switch>
-                        <Route path='/' render={(props) => <LoginComponent {...props} tryLogin={(userEmail, userPassword) => this.props.tryLogin(userEmail, userPassword)} />} />
+                        <Route path='/' render={(props) => <LoginComponent {...props} logInMassage = {this.props.logInMassage} tryLogin={(userEmail, userPassword) => this.props.tryLogin(userEmail, userPassword)} />} />
                     </Switch>
                 }
             </div>

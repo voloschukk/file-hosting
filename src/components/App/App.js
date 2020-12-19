@@ -17,8 +17,9 @@ export default class App extends Component {
     super(props);
     this.state = {
       isLogIn: false,
-      user: { id: null, name: '', email: '', password: '', group: 'user' },
-      userRole: 'user'
+      user: { id: null, name: '', email: '', password: '', group: 'user', access: false },
+      userRole: 'user',
+      logInMassage: ''
     }
     this.tryLogin = this.tryLogin.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
@@ -36,10 +37,18 @@ export default class App extends Component {
     const usersList = JSON.parse(localStorage.getItem("usersList"));
     for (let i = 0; i < usersList.length; i++) {
       if (usersList[i].email === userEmail && usersList[i].password === userPassword) {
-        this.setState({ isLogIn: true, user: usersList[i], userRole: usersList[i].group });
-        set_cookie("userEmail", userEmail);
-        set_cookie("userPassword", userPassword);
-        break;
+        if (usersList[i].access) {
+          this.setState({ isLogIn: true, user: usersList[i], userRole: usersList[i].group });
+          set_cookie("userEmail", userEmail);
+          set_cookie("userPassword", userPassword);
+          break;
+        }
+        else {
+          this.setState({ logInMassage: 'waiting access from admin' });
+        }
+      }
+      else {
+        this.setState({ logInMassage: 'incorrect login or password' });
       }
     }
   }
@@ -52,7 +61,7 @@ export default class App extends Component {
 
   render() {
 
-    name ();
+    //test ();
 
     return (
       <div className="container-xl">
@@ -69,7 +78,7 @@ export default class App extends Component {
             <MenuComponent userRole={this.state.userRole} isLogIn={this.state.isLogIn} />
           </div>
           <div className="col col-9">
-            <ContentComponent user={this.state.user} isLogIn={this.state.isLogIn} tryLogin={(userEmail, userPassword) => this.tryLogin(userEmail, userPassword)} />
+            <ContentComponent user={this.state.user} isLogIn={this.state.isLogIn} logInMassage={this.state.logInMassage} tryLogin={(userEmail, userPassword) => this.tryLogin(userEmail, userPassword)} logOut={this.handleLogOut} />
           </div>
         </div>
       </div>
@@ -77,7 +86,7 @@ export default class App extends Component {
   }
 }
 
-function name(params) {
+function test(params) {
 
   let repete = 10;
 
@@ -93,7 +102,7 @@ function name(params) {
       a = "item " + i;
     }
     const end = new Date().getTime();
-    time =+ (end - start);
+    time = + (end - start);
   }
   console.log('time_for', time / repete);
 
@@ -104,7 +113,7 @@ function name(params) {
       a = "item " + item;
     });
     const end = new Date().getTime();
-    time =+ (end - start);
+    time = + (end - start);
   }
   console.log('time_foreach', time / repete);
 
@@ -115,7 +124,7 @@ function name(params) {
       return "item " + item;
     });
     const end = new Date().getTime();
-    time =+ (end - start);
+    time = + (end - start);
   }
   console.log('time_map', time / repete);
 
@@ -126,7 +135,7 @@ function name(params) {
       return "item " + current;
     });
     const end = new Date().getTime();
-    time =+ (end - start);
+    time = + (end - start);
   }
   console.log('time_ruduse', time / repete);
 }

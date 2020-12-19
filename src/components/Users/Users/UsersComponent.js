@@ -15,7 +15,7 @@ export default class UsersComponent extends Component {
     }
 
     state = {
-        user: { id: null, name: '', email: '', password: '', group: 'user' },
+        user: { id: null, name: '', email: '', password: '', group: 'user', access: false },
         showModal: false,
         addNewUser: false
     }
@@ -27,14 +27,8 @@ export default class UsersComponent extends Component {
     }
 
     handleAddUser = () => {
-        let id = 0;
-        for (let i = 0; i < this.state.usersList.length; i++) {
-            if (this.state.usersList[i].id > id) {
-                id = this.state.usersList[i].id;
-            }
-        }
-        id = id + 1;
-        const user = { id: id, name: 'user' + id, email: 'example@gmail.com', password: 'password' + id, group: 'user' };
+        let randomUser = Math.ceil(Math.random() * 1000);
+        const user = { id: null, name: 'user' + randomUser, email: 'example' + randomUser + '@gmail.com', password: 'password' + randomUser, group: 'user', access: false };
         this.setState({ user: user, showModal: !this.state.showModal, addNewUser: true });
     }
 
@@ -89,7 +83,9 @@ export default class UsersComponent extends Component {
                     showModal={this.state.showModal}
                     user={{ ...this.state.user }}
                     saveUsersChanges={(user) => this.saveUsersChanges(user)}
-                    closeModal={this.closeModal} />}
+                    closeModal={this.closeModal}
+                    enableGroup={true}
+                    enableAccess={true} />}
                 <button className="btn btn-outline-primary btn-sm mb-2" onClick={this.handleAddUser}> ADD new user </button>
                 <UserHeaderComponent />
                 {listItems}

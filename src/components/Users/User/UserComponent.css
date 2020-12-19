@@ -2,7 +2,7 @@
   cursor: pointer;
 }
 
-.details-main-container {
+.user-main-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -13,32 +13,36 @@
   padding: 5px;
 }
 
-.details-items-id {
-  flex: 0 1 6%;
+.user-items-id {
+  flex: 0 1 5%;
 }
 
-.details-items-name {
-  flex: 0 1 10%;
-}
-
-.details-items-email {
-  flex: 0 1 25%;
-}
-
-.details-items-password {
-  flex: 0 1 25%;
-}
-
-.details-items-group {
+.user-items-name {
   flex: 0 1 15%;
 }
 
-.details-items-edit {
-  flex: 0 1 8%;
+.user-items-email {
+  flex: 0 1 25%;
 }
 
-.details-items-delete {
-  flex: 0 1 8%;
+.user-items-password {
+  flex: 0 1 25%;
+}
+
+.user-items-group {
+  flex: 0 1 15%;
+}
+
+.user-items-access {
+  flex: 0 1 5%;
+}
+
+.user-items-edit {
+  flex: 0 1 5%;
+}
+
+.user-items-delete {
+  flex: 0 1 5%;
 }
 
 .file-header {

@@ -11,7 +11,7 @@ export default class MenuComponent extends Component {
             { name: 'Users', path: '/users', className: 'list-group-item' },
             { name: 'My Data', path: '/my-data', className: 'list-group-item' },
             { name: 'Trash', path: '/trash', className: 'list-group-item' },
-            { name: 'Menu4', path: '/menu4', className: 'list-group-item' }],
+            { name: 'Setting', path: '/setting', className: 'list-group-item' }],
         };
         this.changeActive = this.changeActive.bind(this);
     }
