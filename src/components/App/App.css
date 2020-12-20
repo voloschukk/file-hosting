@@ -1,19 +1,12 @@
 :root {
   --header-height: 50px;
   --user-row-height: 50px;
-
-
 }
 
 *{
   box-sizing: border-box;
+  font-size: 14px;
 }
-
-
-.custom-file-label::after {
-  content: "Upload" !important;
-}
-
 
 header{
   height: var(--header-height);
@@ -25,10 +18,6 @@ header{
 
 .main-row{
   min-height: calc(100vh - var(--header-height) - var(--user-row-height));
-}
-
-.content{
-        
 }
 
 .height100{

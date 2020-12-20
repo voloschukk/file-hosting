@@ -35,21 +35,19 @@ export default class App extends Component {
 
   tryLogin = (userEmail, userPassword) => {
     const usersList = JSON.parse(localStorage.getItem("usersList"));
-    for (let i = 0; i < usersList.length; i++) {
-      if (usersList[i].email === userEmail && usersList[i].password === userPassword) {
-        if (usersList[i].access) {
-          this.setState({ isLogIn: true, user: usersList[i], userRole: usersList[i].group });
-          set_cookie("userEmail", userEmail);
-          set_cookie("userPassword", userPassword);
-          break;
-        }
-        else {
-          this.setState({ logInMassage: 'waiting access from admin' });
-        }
+    let user = usersList.find(item => item.email === userEmail && item.password === userPassword);
+    if (user) {
+      if (user.access) {
+        this.setState({ isLogIn: true, user: user, userRole: user.group });
+        set_cookie("userEmail", userEmail);
+        set_cookie("userPassword", userPassword);
       }
       else {
-        this.setState({ logInMassage: 'incorrect login or password' });
+        this.setState({ logInMassage: 'wait for administrator confirmation' });
       }
+    }
+    else {
+      this.setState({ logInMassage: 'incorrect login or password' });
     }
   }
 

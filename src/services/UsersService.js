@@ -25,6 +25,18 @@ export function deleteUser(userid) {
     let usersList = JSON.parse(localStorage.getItem("usersList"));
     let deleteUserId = usersList.findIndex((item) => item.id === userid);
     usersList.splice(deleteUserId, 1);
-    console.log(usersList);
+    localStorage.setItem("usersList", JSON.stringify(usersList));
+}
+
+export function editUser(user) {
+    let usersList = JSON.parse(localStorage.getItem("usersList"));
+    let editUserId = usersList.findIndex((item) => item.id === user.id);
+    usersList[editUserId] = user;
+    localStorage.setItem("usersList", JSON.stringify(usersList));
+}
+
+export function addUser(user) {
+    let usersList = JSON.parse(localStorage.getItem("usersList"));
+    usersList.push(user);
     localStorage.setItem("usersList", JSON.stringify(usersList));
 }

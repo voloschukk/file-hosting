@@ -1,6 +1,13 @@
+.custom-file-label::after {
+    content: "" !important;
+    width: 40px;
+    background-image: url(https://img.icons8.com/ultraviolet/30/000000/upload-2--v1.png) ;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
 .filecontainer{
     width: 100px;
-    
 }
 
 .user-data{

@@ -30,7 +30,7 @@ export default class ModalAddUserComponent extends Component {
     handleChange(event) {
         const user = this.state.user;
         user[event.target.name] = event.target.value;
-        if (event.target.name === 'access') {user[event.target.name] = event.target.value === "true" ? true : false}
+        if (event.target.name === 'access') { user[event.target.name] = event.target.value === "true" ? true : false }
         this.setState({ user: user },
             () => { this.validateField(event.target.name, event.target.value) });
     }
@@ -93,16 +93,11 @@ export default class ModalAddUserComponent extends Component {
         let { user, usersList } = this.state;
         delete user.password2;
         if (user.id === null) {
-            let id = 0;
-            for (let i = 0; i < usersList.length; i++) {
-                if (usersList[i].id > id) {
-                    id = usersList[i].id;
-                }
-            }
-            id = id + 1;
+            let id = usersList.reduce((result, current) => (result > current.id) ? result : current.id, 0) + 1;
             user.id = id;
         }
         this.props.saveUsersChanges(user)
+        event.preventDefault();
     }
 
     render() {
@@ -150,8 +145,6 @@ export default class ModalAddUserComponent extends Component {
                                 </select>
                                 <div className="error"></div>
                             </div>}
-
-
                         <input disabled={!this.state.isValidForm} className="btn btn-primary m-1" type="submit" value="Submit" />
                         <button className="btn btn-primary m-1" onClick={this.props.closeModal}>Cancel</button>
                     </form>

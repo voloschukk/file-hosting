@@ -21,10 +21,8 @@ export function getFiles(id, tarsh) {
   const userFiles = [];
   for (let i = 0; i < userFilesId.length; i++) {
     let fileId = userFilesId[i].fileId;
-    let file = files.find(item => item.id === fileId);
-    if (file.trash === tarsh) {
-      userFiles.push(file);
-    }
+    let file = files.find(item => item.id === fileId && item.trash === tarsh);
+    if (file !== undefined) { userFiles.push(file); }
   }
   return userFiles;
 }
@@ -33,7 +31,7 @@ export function deleteFilesToTrash(filesForDelete) {
   const files = JSON.parse(localStorage.getItem("files"));
   for (let i = 0; i < filesForDelete.length; i++) {
     let fileIndex = files.findIndex(item => item.id === filesForDelete[i].id);
-    files[fileIndex].trash = true;
+    if (fileIndex !== -1) { files[fileIndex].trash = true; }
   }
   localStorage.setItem("files", JSON.stringify(files));
 }
@@ -42,7 +40,7 @@ export function restoreFilesFromTrash(filesToRestore) {
   const files = JSON.parse(localStorage.getItem("files"));
   for (let i = 0; i < filesToRestore.length; i++) {
     let fileIndex = files.findIndex(item => item.id === filesToRestore[i].id);
-    files[fileIndex].trash = false;
+    if (fileIndex !== -1) { files[fileIndex].trash = false; }
   }
   localStorage.setItem("files", JSON.stringify(files));
 }
@@ -55,17 +53,16 @@ export function changeFile(file) {
 }
 
 export function addFile(newFile, id) {
-  let maxID = 0;
+  // add new file to "files" 
   const files = JSON.parse(localStorage.getItem("files"));
-  for (let i = 0; i < files.length; i++) {
-    if (maxID <= files[i].id) { maxID = files[i].id + 1 }
-  }
-  const file = { id: maxID, name: newFile.name, path: '', type: newFile.type, createDate: newFile.lastModifiedDate, creater: id, size: newFile.size, lastModified: newFile.lastModified, trash: false }
+  let nextID = files.reduce((result, current) => (result <= current.id) ? current.id : result, 0) + 1;
+  const file = { id: nextID, name: newFile.name, path: '', type: newFile.type, createDate: newFile.lastModifiedDate, creater: id, size: newFile.size, lastModified: newFile.lastModified, trash: false }
   files.push(file);
   localStorage.setItem("files", JSON.stringify(files));
 
+  // add new file to "usersAndFiles" 
   const usersAndFiles = JSON.parse(localStorage.getItem("usersAndFiles"));
-  const userAndFile = { userId: id, fileId: maxID };
+  const userAndFile = { userId: id, fileId: nextID };
   usersAndFiles.push(userAndFile);
   localStorage.setItem("usersAndFiles", JSON.stringify(usersAndFiles));
 }

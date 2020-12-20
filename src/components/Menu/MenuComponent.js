@@ -18,7 +18,7 @@ export default class MenuComponent extends Component {
 
     componentDidMount() {
         const listLinks = this.state.links;
-        listLinks.forEach(function (item, i, arr) {
+        listLinks.forEach(item => {
             item.className = "list-group-item";
             if (item.path === window.location.pathname) { item.className = "list-group-item active" }
         });
@@ -28,7 +28,7 @@ export default class MenuComponent extends Component {
     componentDidUpdate(prevProps) {
         if (prevProps.userRole !== this.props.userRole) {
             const listLinks = this.state.links;
-            listLinks.forEach(function (item, i, arr) {
+            listLinks.forEach(item => {
                 item.className = "list-group-item";
                 if (item.path === window.location.pathname) { item.className = "list-group-item active" }
             });
@@ -39,23 +39,19 @@ export default class MenuComponent extends Component {
     changeActive(event) {
         if (event.target.parentNode.nodeName === "LI") {
             const listLinks = this.state.links;
-            listLinks.forEach(function (item, i, arr) {
-                item.name === event.target.textContent ? item.className = "list-group-item active" : item.className = "list-group-item";
+            listLinks.forEach(item => {
+                item.className = item.name === event.target.textContent ? "list-group-item active" : "list-group-item";
             });
             this.setState({ links: listLinks });
         }
     }
 
     render() {
-        const links = this.state.links;
+        const links = this.state.links.slice(0);
+        
         if (this.props.userRole !== 'admin') {
-            for (let i = 0; i < links.length; i++) {
-                if (links[i].name === 'Users') {
-                    //links.splice(i, 1);
-                    links[i].className = links[i].className + " hide";
-                    break;
-                }
-            }
+            let indexUsers = links.findIndex(item => item.name === 'Users');
+            if ( indexUsers !== -1) links.splice(indexUsers, 1);
         }
 
         const listLinks = links.map((links) =>

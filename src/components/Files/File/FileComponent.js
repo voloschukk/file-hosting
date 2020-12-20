@@ -92,7 +92,7 @@ export default class FileComponent extends Component {
                                 <div className="tiles-file-name">
                                     {fileName}
                                 </div>
-                                {!this.props.enableRenameFile && <div>
+                                {this.props.enableRenameFile && <div>
                                     <img className="pointer"
                                         alt="Edit"
                                         src="https://img.icons8.com/ultraviolet/15/000000/edit.png"
@@ -125,7 +125,7 @@ export default class FileComponent extends Component {
                                     {fileName}
                                 </div>
                                 <div className="">
-                                    {!this.props.enableRenameFile &&
+                                    {this.props.enableRenameFile &&
                                         <img className="pointer ml-2"
                                             alt="Edit"
                                             src="https://img.icons8.com/ultraviolet/15/000000/edit.png"

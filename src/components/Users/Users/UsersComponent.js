@@ -1,6 +1,6 @@
 import './UsersComponent.css';
 import React, { Component } from 'react';
-import { getUsersData, promiseUpdateUsersData } from '../../../services/UsersService';
+import { getUsersData, addUser, editUser, deleteUser } from '../../../services/UsersService';
 import ModalAddUserComponent from '../ModalAddUser/ModalAddUserComponent';
 import UserComponent from '../User/UserComponent'
 import UserHeaderComponent from '../User/UserHeaderComponent'
@@ -21,9 +21,9 @@ export default class UsersComponent extends Component {
     }
 
     componentDidUpdate() {
-        const usersList = this.state.usersList;
-        let promise = promiseUpdateUsersData(usersList);
-        promise.then();
+        // const usersList = this.state.usersList;
+        // let promise = promiseUpdateUsersData(usersList);
+        // promise.then();
     }
 
     handleAddUser = () => {
@@ -38,32 +38,25 @@ export default class UsersComponent extends Component {
     }
 
     handleDeleteUser = (event) => {
-        let conf = window.confirm("Are you sure you want to delete the user?");
-        if (conf) {
-            const usersList = this.state.usersList;
-            for (let i = 0; i < usersList.length; i++) {
-                if (usersList[i].id.toString() === event.target.id.toString()) {
-                    usersList.splice(i, 1);
-                    this.setState({ usersList: usersList });
-                    break;
-                }
+        const usersList = this.state.usersList;
+        let user = usersList.find(item => item.id.toString() === event.target.id.toString());
+        if (user !== undefined) {
+            let conf = window.confirm("Are you sure you want to delete the \"" + user.name + "\"?");
+            if (conf) {
+                deleteUser(user.id);
+                this.setState({ usersList: getUsersData() });
             }
         }
     }
 
     saveUsersChanges = (user) => {
-        const usersList = this.state.usersList;
         if (this.state.addNewUser) {
-            usersList.push(user);
+            addUser(user);
         }
         else {
-            for (let i = 0; i < usersList.length; i++) {
-                if (usersList[i].id === user.id) {
-                    usersList[i] = user;
-                }
-            }
+            editUser(user)
         }
-        this.setState({ usersList: usersList });
+        this.setState({ usersList: getUsersData() });
         this.closeModal();
     }
 
