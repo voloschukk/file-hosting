@@ -1,5 +1,7 @@
 import './DragAndDropComponent.css'
 import React, { Component } from 'react'
+import { setCookie, deleteCookie, getCookie } from '../../../services/CookieService';
+import { texts } from '../../../services/LanguageService';
 
 export default class DragAndDropComponent extends Component {
 
@@ -59,12 +61,13 @@ export default class DragAndDropComponent extends Component {
   }
   
   render() {
+    let translation = texts()[getCookie("language")];
     return (
       <div className="container-drag" ref={this.dropRef}>
         {this.state.drag &&
           <div className="drag">
             <div className="dragtext">
-              <div>drop here</div>
+              <div>{translation.DROP_HERE}</div>
             </div>
           </div>
         }

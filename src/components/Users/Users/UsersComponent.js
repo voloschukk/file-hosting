@@ -4,6 +4,8 @@ import { getUsersData, addUser, editUser, deleteUser } from '../../../services/U
 import ModalAddUserComponent from '../ModalAddUser/ModalAddUserComponent';
 import UserComponent from '../User/UserComponent'
 import UserHeaderComponent from '../User/UserHeaderComponent'
+import { setCookie, deleteCookie, getCookie } from '../../../services/CookieService';
+import { texts } from '../../../services/LanguageService';
 
 export default class UsersComponent extends Component {
 
@@ -38,10 +40,11 @@ export default class UsersComponent extends Component {
     }
 
     handleDeleteUser = (event) => {
+        let translation = texts()[getCookie("language")];
         const usersList = this.state.usersList;
         let user = usersList.find(item => item.id.toString() === event.target.id.toString());
         if (user !== undefined) {
-            let conf = window.confirm("Are you sure you want to delete the \"" + user.name + "\"?");
+            let conf = window.confirm(translation.ARE_YOU_SURE_DELETE_USER + "\"" + user.name + "\"?");
             if (conf) {
                 deleteUser(user.id);
                 this.setState({ usersList: getUsersData() });
@@ -65,6 +68,7 @@ export default class UsersComponent extends Component {
     }
 
     render() {
+        let translation = texts()[getCookie("language")];
         const usersList = this.state.usersList;
         const listItems = usersList.map((usersList) =>
             <UserComponent usersList={usersList} handleDeleteUser={this.handleDeleteUser} handleEditUser={this.handleEditUser} />
@@ -79,7 +83,7 @@ export default class UsersComponent extends Component {
                     closeModal={this.closeModal}
                     enableGroup={true}
                     enableAccess={true} />}
-                <button className="btn btn-outline-primary btn-sm mb-2" onClick={this.handleAddUser}> ADD new user </button>
+                <button className="btn btn-outline-primary btn-sm mb-2" onClick={this.handleAddUser}> {translation.ADD_NEW_USER} </button>
                 <UserHeaderComponent />
                 {listItems}
             </div>

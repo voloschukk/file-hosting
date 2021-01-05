@@ -4,7 +4,8 @@ import MenuComponent from '../Menu/MenuComponent';
 import ContentComponent from '../Content/ContentComponent';
 import { initFilesData } from '../../services/FilesService';
 import { initUsersData } from '../../services/UsersService';
-import { set_cookie, delete_cookie, get_cookie } from '../../services/CookieService';
+import { setCookie, deleteCookie, getCookie } from '../../services/CookieService';
+import { texts } from '../../services/LanguageService';
 
 initFilesData();
 initUsersData();
@@ -19,18 +20,25 @@ export default class App extends Component {
       isLogIn: false,
       user: { id: null, name: '', email: '', password: '', group: 'user', access: false },
       userRole: 'user',
-      logInMassage: ''
+      logInMassage: '',
+      language: "en"
     }
     this.tryLogin = this.tryLogin.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
+    this.changeLanguage = this.changeLanguage.bind(this);
   }
 
   componentDidMount() {
-    let userEmail = get_cookie("userEmail");
-    let userPassword = get_cookie("userPassword");
+    let userEmail = getCookie("userEmail");
+    let userPassword = getCookie("userPassword");
     if (userEmail !== null && userPassword !== null) {
       this.tryLogin(userEmail, userPassword);
     }
+    let language = getCookie("language");
+    if (language !== null ) {
+      this.setState({ language: language});
+    }
+
   }
 
   tryLogin = (userEmail, userPassword) => {
@@ -39,8 +47,8 @@ export default class App extends Component {
     if (user) {
       if (user.access) {
         this.setState({ isLogIn: true, user: user, userRole: user.group });
-        set_cookie("userEmail", userEmail);
-        set_cookie("userPassword", userPassword);
+        setCookie("userEmail", userEmail);
+        setCookie("userPassword", userPassword);
       }
       else {
         this.setState({ logInMassage: 'wait for administrator confirmation' });
@@ -53,23 +61,33 @@ export default class App extends Component {
 
   handleLogOut() {
     this.setState({ isLogIn: false, userRole: 'user' });
-    delete_cookie("userEmail");
-    delete_cookie("userPassword");
+    deleteCookie("userEmail");
+    deleteCookie("userPassword");
   }
+
+  changeLanguage() {
+    let newLanguage = this.state.language === "ru" ? "en" : "ru";
+    this.setState({ language: newLanguage });
+    setCookie("language", newLanguage);
+  }
+
 
   render() {
 
     //test ();
 
+    let translation = texts()[this.state.language];
+
     return (
       <div className="container-xl">
         <header className="row border p-2 border-primary ">
-          LOGO
+          File hosting
+          <button className="btn btn-outline-primary" onClick={this.changeLanguage}> {this.state.language} </button>
         </header>
         <div className="row border border-primary user-row">
-          {!this.state.isLogIn && <label className="m-2">Hello, guest</label>}
-          {this.state.isLogIn && <label className="m-2">Hello, {this.state.user.name}</label>}
-          {this.state.isLogIn && <button className="btn btn-outline-primary btn-sm ml-1" onClick={this.handleLogOut}> LogOut </button>}
+          {!this.state.isLogIn && <label className="m-2">{translation.HELLO}, {translation.GUEST}</label>}
+          {this.state.isLogIn && <label className="m-2">{translation.HELLO}, {this.state.user.name}</label>}
+          {this.state.isLogIn && <button className="btn btn-outline-primary btn-logout" onClick={this.handleLogOut}> {translation.LOGOUT} </button>}
         </div>
         <div className="row p-2 border border-primary main-row">
           <div className="col col-3 p-2 border border-primary">

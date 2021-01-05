@@ -1,5 +1,7 @@
 import './FileComponent.css';
 import React, { Component } from 'react'
+import { setCookie, deleteCookie, getCookie } from '../../../services/CookieService';
+import { texts } from '../../../services/LanguageService';
 
 export default class FileComponent extends Component {
 
@@ -10,6 +12,7 @@ export default class FileComponent extends Component {
         this.cancelEditFile = this.cancelEditFile.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.checkFile = this.checkFile.bind(this);
+        this.chageActiveFolder = this.chageActiveFolder.bind(this);
     }
 
     state = {
@@ -48,7 +51,13 @@ export default class FileComponent extends Component {
         this.setState({ fileName: event.target.value });
     }
 
+    chageActiveFolder(event){
+        this.props.chageActiveFolder(event.target.id);
+    }
+
     render() {
+
+        let translation = texts()[getCookie("language")];
 
         const file = this.state.file;
         var fileName, nameLength, fileSize;
@@ -65,6 +74,7 @@ export default class FileComponent extends Component {
         }
 
         // ----- transform fileDate
+        
         const fileDate = file.createDate.slice(0, 10)
 
         // ----- transform fileSize
@@ -74,18 +84,19 @@ export default class FileComponent extends Component {
             fileSize = fileSize / 1024;
             prefix++;
         };
-        if (prefix === 0) { fileSize = fileSize.toFixed(1) + " B" }
-        if (prefix === 1) { fileSize = fileSize.toFixed(1) + " KB" }
-        if (prefix === 2) { fileSize = fileSize.toFixed(1) + " MB" }
-        if (prefix === 3) { fileSize = fileSize.toFixed(1) + " GB" }
+        if (prefix === 0) { fileSize = fileSize.toFixed(1) + " " + translation.B }
+        if (prefix === 1) { fileSize = fileSize.toFixed(1) + " " + translation.KB }
+        if (prefix === 2) { fileSize = fileSize.toFixed(1) + " " + translation.MB }
+        if (prefix === 3) { fileSize = fileSize.toFixed(1) + " " + translation.GB }
 
         return (
             <>
                 {this.props.view === "tiles" &&
-                    <div className="tiles-main-container">
+                    <div className="tiles-main-container" >
                         <input class="tiles-form-check" type="checkbox" id={file.id} onChange={this.checkFile} checked={file.checked} />
                         <div className="tiles-icon">
-                            <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/40/000000/document--v2.png" />
+                            {file.type === "file" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/40/000000/document--v2.png" />}
+                            {file.type === "folder" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/40/000000/live-folder.png" id={file.id} onDoubleClick={this.chageActiveFolder}/>}
                         </div>
                         {this.state.renameFileId.toString() !== file.id.toString() &&
                             <div className="tiles-name-row-noedit">
@@ -119,6 +130,10 @@ export default class FileComponent extends Component {
                 {this.props.view === "details" &&
                     <div className="details-main-container">
                         <input class="details-form-check" type="checkbox" id={file.id} onChange={this.checkFile} checked={file.checked} />
+                        <div className="details-icon">
+                            {file.type === "file" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/15/000000/document--v2.png" />}
+                            {file.type === "folder" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/15/000000/live-folder.png" id={file.id} onDoubleClick={this.chageActiveFolder}/>}
+                        </div>
                         {this.state.renameFileId.toString() !== file.id.toString() &&
                             <div className="details-items-name">
                                 <div className="details-file-name">

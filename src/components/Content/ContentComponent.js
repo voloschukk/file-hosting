@@ -20,11 +20,11 @@ export default class ContentComponent extends Component {
                         <Route exact path='/' component={HomeComponent} />
                         {isAdmin && <Route path='/users' component={UsersComponent} />}
                         <Route path='/my-data' render={(props) => {
-                            return <FilesComponent {...props} user={user} isTrash={false} enableAddFile={true} enableRenameFile={true} />
+                            return <FilesComponent {...props} user={user} isTrash={false} enableAddFile={true} enableRenameFile={true} enablePath={true}/>
                         }
                         } />
                         <Route path='/trash' render={(props) => {
-                            return <FilesComponent {...props} user={user} isTrash={true} enableAddFile={false} enableRenameFile={false} />
+                            return <FilesComponent {...props} user={user} isTrash={true} enableAddFile={false} enableRenameFile={false} enablePath={false} />
                         }
                         } />
                         <Route path='/setting' render={(props) => {

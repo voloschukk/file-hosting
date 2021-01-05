@@ -4,6 +4,8 @@ import { getFiles, changeFile, addFile, setView, getView, deleteFilesToTrash, re
 import FileComponent from '../File/FileComponent'
 import FileHeaderComponent from '../File/FileHeaderComponent'
 import DragAndDropComponent from '../DragAndDrop/DragAndDropComponent'
+import { setCookie, deleteCookie, getCookie } from '../../../services/CookieService';
+import { texts } from '../../../services/LanguageService';
 
 export default class FilesComponent extends Component {
 
@@ -15,10 +17,15 @@ export default class FilesComponent extends Component {
         this.restoreFile = this.restoreFile.bind(this);
         this.checkAllFiles = this.checkAllFiles.bind(this);
         this.changeSort = this.changeSort.bind(this);
+        this.chageActiveFolder = this.chageActiveFolder.bind(this);
+        this.goBackFolder = this.goBackFolder.bind(this);
+        this.addFolder = this.addFolder.bind(this);
     }
 
     state = {
         files: [],
+        folders: [],
+        activeFolder: 0,
         isTrash: this.props.isTrash,
         view: getView(),
         allCheked: false,
@@ -34,6 +41,7 @@ export default class FilesComponent extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+
         console.log('---Files componentDidUpdate');
         if (prevProps.isTrash !== this.props.isTrash) {
             this.setState({ files: this.getFilesWithChecked(this.props.user.id, this.props.isTrash), view: getView(), isTrash: this.props.isTrash, allCheked: false })
@@ -42,13 +50,20 @@ export default class FilesComponent extends Component {
             this.changeSort({ target: { name: this.state.sortBy } }, true);
             this.changeSort({ target: { name: this.state.sortDirection } }, true);
         }
+        if (prevState.activeFolder !== this.state.activeFolder) {
+            this.setState({ files: this.getFilesWithChecked(this.props.user.id, this.props.isTrash), view: getView(), isTrash: this.props.isTrash, allCheked: false })
+        }
     }
 
     getFilesWithChecked(userId, isTrash) {
-        let files = getFiles(userId, isTrash);
+        let files = [];
+        if (!isTrash) files = getFiles(userId, isTrash).filter(item => item.parent === this.state.activeFolder);
+        if (isTrash) files = getFiles(userId, isTrash);
+
         if (files) {
             files.forEach(item => item.checked = false)
         }
+
         return files;
     }
 
@@ -65,14 +80,14 @@ export default class FilesComponent extends Component {
     }
 
     renameFile(file) {
-        changeFile(file);
+        changeFile(this.props.user.id, file);
         this.setState({ files: this.getFilesWithChecked(this.props.user.id, false) });
     }
 
     onSelectFileHandler(files) {
         for (let i = 0; i < files.length; i++) {
             if (!files[i].name) return
-            addFile(files[i], this.props.user.id);
+            addFile(this.props.user.id, this.state.activeFolder, files[i], "file");
         }
         this.setState({ files: this.getFilesWithChecked(this.props.user.id, false) });
     }
@@ -90,6 +105,11 @@ export default class FilesComponent extends Component {
                 if (event.target.name !== this.state.sortDirection || necessary) {
                     let files = this.state.files;
                     files.reverse();
+                    files.sort((a, b) => {
+                        if (a["type"] < b["type"]) return 1;
+                        if (a["type"] == b["type"]) return 0;
+                        if (a["type"] > b["type"]) return -1;
+                    })
                     this.setState({ files: files, sortDirection: event.target.name });
                 }
             }
@@ -101,6 +121,11 @@ export default class FilesComponent extends Component {
                         if (a[event.target.name] == b[event.target.name]) return 0;
                         if (a[event.target.name] < b[event.target.name]) return -1;
                     })
+                    files.sort((a, b) => {
+                        if (a["type"] < b["type"]) return 1;
+                        if (a["type"] == b["type"]) return 0;
+                        if (a["type"] > b["type"]) return -1;
+                    })
                     this.setState({ files: files, sortBy: event.target.name });
                 }
             }
@@ -111,7 +136,7 @@ export default class FilesComponent extends Component {
         let files = this.state.files;
         let filesToDelete = files.filter(item => item.checked === true);
         if (filesToDelete.length > 0) {
-            deleteFilesToTrash(filesToDelete);
+            deleteFilesToTrash(this.props.user.id, filesToDelete);
             this.setState({ files: this.getFilesWithChecked(this.props.user.id, this.state.isTrash), allCheked: false });
         }
     }
@@ -120,12 +145,47 @@ export default class FilesComponent extends Component {
         let files = this.state.files;
         let filesToRestore = files.filter(item => item.checked === true);
         if (filesToRestore.length > 0) {
-            restoreFilesFromTrash(filesToRestore);
+            restoreFilesFromTrash(this.props.user.id, filesToRestore);
             this.setState({ files: this.getFilesWithChecked(this.props.user.id, this.state.isTrash), allCheked: false });
         }
     }
 
+    chageActiveFolder(id) {
+        if (!this.props.isTrash) {
+            this.setState({ activeFolder: Number(id) })
+        }
+    }
+
+    goBackFolder() {
+        if (this.state.activeFolder !== 0) {
+            let files = getFiles(this.props.user.id, this.props.isTrash).find(item => item.id === this.state.activeFolder);
+            let parentFolder = files.parent;
+            this.setState({ activeFolder: parentFolder });
+        }
+    }
+
+    getParent(folderId) {
+
+        if (folderId === 0) {
+            return "../";
+        }
+        else {
+            return this.getParent(getFiles(this.props.user.id, this.props.isTrash).find(item => item.id === folderId).parent) + " " + getFiles(this.props.user.id, this.props.isTrash).find(item => item.id === folderId).name.toString() + " /"
+        }
+    }
+
+    addFolder() {
+        let file = { id: null, name: 'new folder', parent: this.state.activeFolder, trash: false, path: '', type: 'folder', type2: '', createDate: new Date(), lastModifiedDate: new Date(), creater: 0, size: 0, lastModified: 1 }
+
+        addFile(this.props.user.id, this.state.activeFolder, file, 'folder');
+        this.setState({ files: this.getFilesWithChecked(this.props.user.id, false) });
+    }
+
+
     render() {
+
+        let translation = texts()[getCookie("language")];
+
         const { files } = this.state;
         let filesItems = [];
         if (files) {
@@ -135,9 +195,15 @@ export default class FilesComponent extends Component {
                     view={this.state.view}
                     enableRenameFile={this.props.enableRenameFile}
                     renameFile={(file) => this.renameFile(file)}
-                    checkFile={(id, checked) => this.checkFile(id, checked)} />
+                    checkFile={(id, checked) => this.checkFile(id, checked)}
+                    chageActiveFolder={(id) => this.chageActiveFolder(id)}
+
+                />
             );
         }
+
+        let path = "_";
+        if (this.props.enablePath) path = this.getParent(this.state.activeFolder);
 
         let mark = <img alt="!" src="https://img.icons8.com/ultraviolet/15/000000/checkmark--v1.png" onclick="return false" />;
 
@@ -146,13 +212,24 @@ export default class FilesComponent extends Component {
         return (
             <div className="container user-data">
                 <div className="row control-row">
-                    <div className="col col-2 flex-centre">
+                    <div className="col col-1 flex-centre">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" onChange={this.checkAllFiles} checked={this.state.allCheked} id="defaultCheck1" />
-                            <label class="form-check-label" for="defaultCheck1">All</label>
+                            <label class="form-check-label" for="defaultCheck1">{translation.ALL}</label>
                         </div>
                     </div>
-                    <div className="col col-7 flex-centre">
+                    <div className="col col-1 flex-centre">
+                        {this.props.enablePath && <button class="btn btn-outline-primary" type="button" title={translation.UP} onClick={this.goBackFolder}>
+                            <img alt="view" src="https://img.icons8.com/ultraviolet/20/000000/upload-to-ftp.png" />
+                        </button>}
+                    </div>
+                    <div className="col col-1 flex-centre">
+                        {this.props.enablePath && <button class="btn btn-outline-primary" type="button" title={translation.NEW_FOLDER} onClick={this.addFolder}>
+                            <img alt="view" src="https://img.icons8.com/ultraviolet/20/000000/add-folder.png" />
+                        </button>}
+                    </div>
+
+                    <div className="col col-6 flex-centre">
                         {this.props.enableAddFile && <div className="input-group">
                             <div className="custom-file">
                                 <input type="file"
@@ -161,34 +238,34 @@ export default class FilesComponent extends Component {
                                     aria-describedby="inputGroupFileAddon01"
                                     multiple="multiple"
                                     onChange={(e) => this.onSelectFileHandler(e.target.files)} />
-                                <label className="custom-file-label" for="inputGroupFile01">Choose file</label>
+                                <label className="custom-file-label" for="inputGroupFile01">{translation.CHOOSE_FILE}</label>
                             </div>
                         </div>}
                     </div>
                     <div className="col col-1 flex-centre">
                         <div className="dropdown dropleft">
-                            <button className="btn btn-outline-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" title="Sort" aria-haspopup="true" aria-expanded="false">
+                            <button className="btn btn-outline-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" title={translation.SORT} aria-haspopup="true" aria-expanded="false">
                                 {this.state.sortDirection === "ascending" && <img alt="view" src="https://img.icons8.com/ultraviolet/20/000000/generic-sorting-2.png" />}
                                 {this.state.sortDirection === "descending" && <img alt="view" src="https://img.icons8.com/ultraviolet/20/000000/generic-sorting.png" />}
                             </button>
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <button className="btn dropdown-item" name="name" onClick={this.changeSort}>Name
+                                <button className="btn dropdown-item" name="name" onClick={this.changeSort}>{translation.NAME}
                                     {this.state.sortBy === "name" && mark}
                                 </button>
-                                <button className="btn dropdown-item" name="createDate" onClick={this.changeSort}>Date
+                                <button className="btn dropdown-item" name="createDate" onClick={this.changeSort}>{translation.DATE}
                                     {this.state.sortBy === "createDate" && mark}
                                 </button>
-                                <button className="btn dropdown-item" name="creater" onClick={this.changeSort}>Creater
+                                <button className="btn dropdown-item" name="creater" onClick={this.changeSort}>{translation.CREATER}
                                     {this.state.sortBy === "creater" && mark}
                                 </button>
-                                <button className="btn dropdown-item" name="size" onClick={this.changeSort}>Size
+                                <button className="btn dropdown-item" name="size" onClick={this.changeSort}>{translation.SIZE}
                                     {this.state.sortBy === "size" && mark}
                                 </button>
                                 <div class="dropdown-divider"></div>
-                                <button className="btn dropdown-item" name="ascending" onClick={this.changeSort}>Ascending
+                                <button className="btn dropdown-item" name="ascending" onClick={this.changeSort}>{translation.ASCENDING}
                                     {this.state.sortDirection === "ascending" && mark}
                                 </button>
-                                <button className="btn dropdown-item" name="descending" onClick={this.changeSort}>Descending
+                                <button className="btn dropdown-item" name="descending" onClick={this.changeSort}>{translation.DESCENDING}
                                     {this.state.sortDirection === "descending" && mark}
                                 </button>
                             </div>
@@ -196,26 +273,29 @@ export default class FilesComponent extends Component {
                     </div>
                     <div className="col col-1 flex-centre">
                         <div className="dropdown dropleft">
-                            <button className="btn btn-outline-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" title="View" aria-haspopup="true" aria-expanded="false">
+                            <button className="btn btn-outline-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" title={translation.VIEW} aria-haspopup="true" aria-expanded="false">
                                 {this.state.view === "tiles" && <img alt="view" src="https://img.icons8.com/ultraviolet/20/000000/thumbnails.png" />}
                                 {this.state.view === "details" && <img alt="view" src="https://img.icons8.com/ultraviolet/20/000000/details.png" />}
                             </button>
                             <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <button className="btn dropdown-item" name="tiles" onClick={this.changeView}>Tiles {this.state.view === "tiles" && mark} </button>
-                                <button className="btn dropdown-item" name="details" onClick={this.changeView}>Details {this.state.view === "details" && mark}</button>
+                                <button className="btn dropdown-item" name="tiles" onClick={this.changeView}>{translation.TILES} {this.state.view === "tiles" && mark} </button>
+                                <button className="btn dropdown-item" name="details" onClick={this.changeView}>{translation.DETAILS} {this.state.view === "details" && mark}</button>
                             </div>
                         </div>
                     </div>
                     <div className="col col-1 flex-centre">
                         {!this.state.isTrash &&
-                            <button className="btn btn-outline-primary" onClick={this.deleteFile} title="Delete">
+                            <button className="btn btn-outline-primary" onClick={this.deleteFile} title={translation.DELETE}>
                                 <img alt="delete" src="https://img.icons8.com/ultraviolet/20/000000/delete--v1.png" />
                             </button>}
                         {this.state.isTrash &&
-                            <button className="btn btn-outline-primary" onClick={this.restoreFile} title="Restore">
+                            <button className="btn btn-outline-primary" onClick={this.restoreFile} title={translation.RESTORE}>
                                 <img alt="restore" src="https://img.icons8.com/ultraviolet/20/000000/upload--v1.png" />
                             </button>}
                     </div>
+                </div>
+                <div className="row path-row">
+                    {path}
                 </div>
                 <div className="row data-row">
                     {this.props.enableAddFile &&

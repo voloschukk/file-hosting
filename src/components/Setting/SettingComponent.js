@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { deleteUser } from '../../services/UsersService'
+import { setCookie, deleteCookie, getCookie } from '../../services/CookieService';
+import { texts } from '../../services/LanguageService';
 
 export default class SettingComponent extends Component {
     constructor(props) {
@@ -8,7 +10,8 @@ export default class SettingComponent extends Component {
     }
 
     deleteUser() {
-        let conf = window.confirm("Are you sure you want to delete your profile?");
+        let translation = texts()[getCookie("language")];
+        let conf = window.confirm(translation.DELETE_MY_PROFILE);
         if (conf) {
             this.props.logOut();
             deleteUser(this.props.user.id);
@@ -16,9 +19,10 @@ export default class SettingComponent extends Component {
     }
 
     render() {
+        let translation = texts()[getCookie("language")];
         return (
             <div>
-                <button type="button" class="btn btn-outline-primary" onClick={this.deleteUser}>Delete my profile from site</button>
+                <button type="button" class="btn btn-outline-primary" onClick={this.deleteUser}>{translation.DELETE_MY_PROFILE}</button>
             </div>
         )
     }

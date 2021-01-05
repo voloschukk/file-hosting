@@ -35,8 +35,12 @@
     height: 50px;
 }
 
+.path-row{
+    height: 21px;
+}
+
 .data-row{
-    height: calc(100% - 50px);
+    height: calc(100% - 50px - 21px);
 }
 
 .flex-centre{

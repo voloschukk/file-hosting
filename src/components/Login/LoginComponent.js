@@ -2,6 +2,8 @@ import './LoginComponent.css';
 import React, { Component } from 'react'
 import { getUsersData, promiseUpdateUsersData } from '../../services/UsersService';
 import ModalAddUserComponent from '../Users/ModalAddUser/ModalAddUserComponent'
+import { setCookie, deleteCookie, getCookie } from '../../services/CookieService';
+import { texts } from '../../services/LanguageService';
 
 export default class LoginComponent extends Component {
 
@@ -53,7 +55,7 @@ export default class LoginComponent extends Component {
 
 
     render() {
-
+        let translation = texts()[getCookie("language")];
         let user = { id: null, name: '', email: '', password: '', group: 'user', access: false };
 
         return (
@@ -67,18 +69,18 @@ export default class LoginComponent extends Component {
                     enableAccess={false} />}
                 <form>
                     <div className="form-group">
-                        <label for="inputEmail">Email address {this.state.isWrongUserData && <span className="red">- {this.props.logInMassage}</span>}</label>
+                        <label for="inputEmail">{translation.EMAIL} {this.state.isWrongUserData && <span className="red">- {this.props.logInMassage}</span>}</label>
                         <input type="text" name='userEmail' value={this.state.userEmail} onChange={this.handleChange} className="form-control" id="inputEmail" aria-describedby="emailHelp" />
-                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        <small id="emailHelp" class="form-text text-muted">{translation.WE_LL_NEVER_SHARE}</small>
                     </div>
                     <div className="form-group">
-                        <label for="inputPassword">Password</label>
+                        <label for="inputPassword">{translation.PASSWORD}</label>
                         <input type="text" name='userPassword' value={this.state.userPassword} onChange={this.handleChange} className="form-control" id="inputPassword" />
                     </div>
 
                 </form>
-                <button type="submit" class="btn btn-primary mt-2" onClick={this.handleSubmit}>Submit</button>
-                <button type="submit" class="btn btn-link mt-2" onClick={this.registration}>Registration</button>
+                <button type="submit" class="btn btn-primary mt-2" onClick={this.handleSubmit}>{translation.SUBMIT}</button>
+                <button type="submit" class="btn btn-link mt-2" onClick={this.registration}>{translation.REGISTRATION}</button>
             </div>
         )
     }

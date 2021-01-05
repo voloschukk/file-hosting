@@ -1,6 +1,8 @@
 import './ModalAddUserComponent.css';
 import { getUsersData } from '../../../services/UsersService';
 import React, { Component } from 'react'
+import { setCookie, deleteCookie, getCookie } from '../../../services/CookieService';
+import { texts } from '../../../services/LanguageService';
 
 export default class ModalAddUserComponent extends Component {
 
@@ -30,7 +32,7 @@ export default class ModalAddUserComponent extends Component {
     handleChange(event) {
         const user = this.state.user;
         user[event.target.name] = event.target.value;
-        if (event.target.name === 'access') { user[event.target.name] = event.target.value === "true" ? true : false }
+        if (event.target.name === 'access') { user[event.target.name] = event.target.checked }
         this.setState({ user: user },
             () => { this.validateField(event.target.name, event.target.value) });
     }
@@ -101,52 +103,72 @@ export default class ModalAddUserComponent extends Component {
     }
 
     render() {
+        let translation = texts()[getCookie("language")];
         return (
             <div className="modal">
                 <div className="container modal-content" >
+                    <img className="cancel-button pointer" alt="cancel" src="https://img.icons8.com/ultraviolet/25/000000/cancel.png" onClick={this.props.closeModal} />
                     <form onSubmit={this.handleSubmit}>
                         <div className="form-group">
-                            <label for="inputName" >Name</label>
+                            <label for="inputName" >{translation.NAME}</label>
                             <input type="text" className="form-control form-control-sm" name="name" value={this.state.user.name} onChange={this.handleChange} id="inputName" aria-describedby="nameHelp" />
                             <small id="nameHelp" className="form-text text-muted error">{this.state.formErrors.name}</small>
                         </div>
                         <div className="form-group">
-                            <label for="inputEmail">Email</label>
+                            <label for="inputEmail">{translation.EMAIL}</label>
                             <input type="email" className="form-control form-control-sm" name="email" value={this.state.user.email} onChange={this.handleChange} id="inputEmail" aria-describedby="emailHelp" />
                             <small id="emailHelp" className="form-text text-muted error">{this.state.formErrors.email}</small>
                         </div>
 
                         <div className="form-group">
-                            <label for="inputPassword">Password</label>
+                            <label for="inputPassword">{translation.PASSWORD}</label>
                             <input type="text" className="form-control form-control-sm" name="password" value={this.state.user.password} onChange={this.handleChange} id="inputPassword" aria-describedby="passwordHelp" />
                             <small id="passwordHelp" className="form-text text-muted error">{this.state.formErrors.password}</small>
                         </div>
                         <div className="form-group">
-                            <label for="inputPassword2">Password Confirm</label>
+                            <label for="inputPassword2">{translation.PASSWORD}</label>
                             <input type="text" className="form-control form-control-sm" name="password2" value={this.state.user.password2} onChange={this.handleChange} id="inputPassword2" aria-describedby="passwordHelp" />
                             <small id="passwordHelp" className="form-text text-muted error">{this.state.formErrors.password2}</small>
                         </div>
-                        {this.props.enableGroup &&
-                            <div className="form-group">
-                                <label for="inputGroup">Group</label>
-                                <select className="custom-select form-control-sm" value={this.state.user.group} name="group" onChange={this.handleChange} id="inputGroup" >
-                                    <option value="admin">Admin</option>
-                                    <option value="moderator">Moderator</option>
-                                    <option value="user">User</option>
-                                </select>
-                                <div className="error"></div>
-                            </div>}
-                        {this.props.enableAccess &&
-                            <div className="form-group">
-                                <label for="inputAccess">Access</label>
-                                <select className="custom-select form-control-sm" value={this.state.user.access.toString()} name="access" onChange={this.handleChange} id="inputAccess" >
-                                    <option value="true">Access</option>
-                                    <option value="false">No Access</option>
-                                </select>
-                                <div className="error"></div>
-                            </div>}
-                        <input disabled={!this.state.isValidForm} className="btn btn-primary m-1" type="submit" value="Submit" />
-                        <button className="btn btn-primary m-1" onClick={this.props.closeModal}>Cancel</button>
+
+                        
+                                {this.props.enableGroup &&
+                                    <div className="form-group">
+                                        <label for="inputGroup">{translation.GROUP}</label>
+                                        <select className="custom-select form-control-sm" value={this.state.user.group} name="group" onChange={this.handleChange} id="inputGroup" >
+                                            <option value="admin">Admin</option>
+                                            <option value="moderator">Moderator</option>
+                                            <option value="user">User</option>
+                                        </select>
+                                        <div className="error"></div>
+                                    </div>}
+                            
+                                {this.props.enableAccess &&
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" checked={this.state.user.access} name="access" onChange={this.handleChange} id="defaultCheck1" />
+                                        <label class="form-check-label" for="defaultCheck1">{translation.ACCESS}</label>
+                                    </div>}
+
+
+
+                            
+
+                            {/* <div className="form-group">
+                                        <label for="inputAccess">Access</label>
+                                        <select className="custom-select form-control-sm" value={this.state.user.access.toString()} name="access" onChange={this.handleChange} id="inputAccess" >
+                                            <option value="true">Access</option>
+                                            <option value="false">No Access</option>
+                                        </select>
+                                        <div className="error"></div>
+                                    </div> */}
+
+
+                        
+                        <div className="button-group">
+                            <input disabled={!this.state.isValidForm} className="btn btn-primary m-1" type="submit" value={translation.SUBMIT} />
+                            <button className="btn btn-primary m-1" onClick={this.props.closeModal}>{translation.CANCEL}</button>
+                        </div>
                     </form>
                 </div>
             </div >
