@@ -2,6 +2,7 @@
 export function texts() {
   return {
     en: {
+      en: "En",
       SUBMIT: "Submit",
       REGISTRATION: "Registration",
       WE_NEVER_SHARE: "We'll never share your email with anyone else.",
@@ -51,11 +52,11 @@ export function texts() {
       SUBMIT: "Sabmit",
       ACCESS: "Access",
       ADD_NEW_USER: "Add new user",
-      REGISTRATION: "Registration",
       WE_LL_NEVER_SHARE: "We'll never share your email with anyone else",
 
     },
     ru: {
+      ru: "Рус",
       SUBMIT: "Отправить",
       REGISTRATION: "Регистрация",
       LOGOUT: "Выход",
@@ -91,7 +92,7 @@ export function texts() {
       DELETE_MY_PROFILE: "Удалить мою учетную запись с сайта",
       ARE_YOU_SURE_DELETE_PROFILE: "Вы уверены что хотите удалить свою учетную запись с сайта?",
       ID: "Id",
-      AC: "Досn",
+      AC: "Дос",
       NAME: "Имя",
       EMAIL: "Почта",
       PASSWORD: "Пароль",
@@ -104,7 +105,6 @@ export function texts() {
       SUBMIT: "Отправить",
       ACCESS: "Доступ",
       ADD_NEW_USER: "Добавить пользователя",
-      REGISTRATION: "Ркгистрация",
       WE_LL_NEVER_SHARE: "Мы никогда ни с кем не поделимся вашим почтовым адресом",
     }
   }

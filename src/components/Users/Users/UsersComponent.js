@@ -1,7 +1,8 @@
 import './UsersComponent.css';
 import React, { Component } from 'react';
 import { getUsersData, addUser, editUser, deleteUser } from '../../../services/UsersService';
-import ModalAddUserComponent from '../ModalAddUser/ModalAddUserComponent';
+import ModalComponent from '../../common/Modal/ModalComponent';
+import AddUserComponent from '../AddUser/AddUserComponent';
 import UserComponent from '../User/UserComponent'
 import UserHeaderComponent from '../User/UserHeaderComponent'
 import { setCookie, deleteCookie, getCookie } from '../../../services/CookieService';
@@ -76,13 +77,14 @@ export default class UsersComponent extends Component {
 
         return (
             <div>
-                {this.state.showModal && <ModalAddUserComponent
-                    showModal={this.state.showModal}
-                    user={{ ...this.state.user }}
-                    saveUsersChanges={(user) => this.saveUsersChanges(user)}
-                    closeModal={this.closeModal}
-                    enableGroup={true}
-                    enableAccess={true} />}
+                <ModalComponent isVisible={this.state.showModal}>
+                    <AddUserComponent
+                        user={{ ...this.state.user }}
+                        saveUsersChanges={(user) => this.saveUsersChanges(user)}
+                        closeModal={this.closeModal}
+                        enableGroup={true}
+                        enableAccess={true} />
+                </ModalComponent>
                 <button className="btn btn-outline-primary btn-sm mb-2" onClick={this.handleAddUser}> {translation.ADD_NEW_USER} </button>
                 <UserHeaderComponent />
                 {listItems}

@@ -46,9 +46,9 @@ export default class FilesComponent extends Component {
         if (prevProps.isTrash !== this.props.isTrash) {
             this.setState({ files: this.getFilesWithChecked(this.props.user.id, this.props.isTrash), view: getView(), isTrash: this.props.isTrash, allCheked: false })
         }
-        if (prevState.files.length !== this.state.files.length) {
-            this.changeSort({ target: { name: this.state.sortBy } }, true);
-            this.changeSort({ target: { name: this.state.sortDirection } }, true);
+        if (JSON.stringify(prevState.files) !== JSON.stringify(this.state.files)) {
+            this.changeSort({ target: { name: this.state.sortBy } });
+            this.changeSort({ target: { name: this.state.sortDirection } });
         }
         if (prevState.activeFolder !== this.state.activeFolder) {
             this.setState({ files: this.getFilesWithChecked(this.props.user.id, this.props.isTrash), view: getView(), isTrash: this.props.isTrash, allCheked: false })
@@ -100,35 +100,38 @@ export default class FilesComponent extends Component {
     }
 
     changeSort(event, necessary = false) {
+        
         if (event.target.nodeName !== "IMG") {
+
+            let files = this.state.files;
+
+
+            let sortDirection = this.state.sortDirection;
+            let sortBy = this.state.sortBy;
+
             if (event.target.name === "ascending" || event.target.name === "descending") {
-                if (event.target.name !== this.state.sortDirection || necessary) {
-                    let files = this.state.files;
-                    files.reverse();
-                    files.sort((a, b) => {
-                        if (a["type"] < b["type"]) return 1;
-                        if (a["type"] == b["type"]) return 0;
-                        if (a["type"] > b["type"]) return -1;
-                    })
-                    this.setState({ files: files, sortDirection: event.target.name });
-                }
+                sortDirection = event.target.name;
             }
             else {
-                if (event.target.name !== this.state.sortBy || necessary) {
-                    let files = this.state.files;
-                    files.sort((a, b) => {
-                        if (a[event.target.name] > b[event.target.name]) return 1;
-                        if (a[event.target.name] == b[event.target.name]) return 0;
-                        if (a[event.target.name] < b[event.target.name]) return -1;
-                    })
-                    files.sort((a, b) => {
-                        if (a["type"] < b["type"]) return 1;
-                        if (a["type"] == b["type"]) return 0;
-                        if (a["type"] > b["type"]) return -1;
-                    })
-                    this.setState({ files: files, sortBy: event.target.name });
-                }
+                sortBy = event.target.name;
             }
+
+            files.sort((a, b) => {
+                if (a[sortBy] > b[sortBy]) return 1;
+                if (a[sortBy] == b[sortBy]) return 0;
+                if (a[sortBy] < b[sortBy]) return -1;
+            })
+            if (sortDirection === "descending") {
+                files.reverse();
+            }
+
+            files.sort((a, b) => {
+                if (a["type"] < b["type"]) return 1;
+                if (a["type"] == b["type"]) return 0;
+                if (a["type"] > b["type"]) return -1;
+            })
+
+            this.setState({ files: files, sortDirection: sortDirection, sortBy: sortBy });
         }
     }
 

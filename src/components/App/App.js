@@ -9,7 +9,6 @@ import { texts } from '../../services/LanguageService';
 
 initFilesData();
 initUsersData();
-
 //promiseStartData.then();
 
 export default class App extends Component {
@@ -29,6 +28,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    console.log("dfgdfgtdfrg");
     let userEmail = getCookie("userEmail");
     let userPassword = getCookie("userPassword");
     if (userEmail !== null && userPassword !== null) {
@@ -37,6 +37,7 @@ export default class App extends Component {
     let language = getCookie("language");
     if (language !== null ) {
       this.setState({ language: language});
+      setCookie("language", language);
     }
 
   }
@@ -73,7 +74,7 @@ export default class App extends Component {
 
 
   render() {
-
+    
     //test ();
 
     let translation = texts()[this.state.language];
@@ -82,7 +83,7 @@ export default class App extends Component {
       <div className="container-xl">
         <header className="row border p-2 border-primary ">
           File hosting
-          <button className="btn btn-outline-primary" onClick={this.changeLanguage}> {this.state.language} </button>
+          <button className="btn btn-outline-primary" onClick={this.changeLanguage}> {translation[this.state.language]} </button>
         </header>
         <div className="row border border-primary user-row">
           {!this.state.isLogIn && <label className="m-2">{translation.HELLO}, {translation.GUEST}</label>}

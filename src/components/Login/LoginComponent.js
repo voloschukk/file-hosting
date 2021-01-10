@@ -1,7 +1,8 @@
 import './LoginComponent.css';
 import React, { Component } from 'react'
 import { getUsersData, promiseUpdateUsersData } from '../../services/UsersService';
-import ModalAddUserComponent from '../Users/ModalAddUser/ModalAddUserComponent'
+import ModalComponent from '../common/Modal/ModalComponent';
+import AddUserComponent from '../Users/AddUser/AddUserComponent';
 import { setCookie, deleteCookie, getCookie } from '../../services/CookieService';
 import { texts } from '../../services/LanguageService';
 
@@ -60,13 +61,16 @@ export default class LoginComponent extends Component {
 
         return (
             <div>
-                {this.state.isRegistartion && <ModalAddUserComponent
-                    showModal={this.state.isRegistartion}
-                    user={user}
-                    saveUsersChanges={(user) => this.addUser(user)}
-                    closeModal={this.closeModal}
-                    enableGroup={false}
-                    enableAccess={false} />}
+
+                <ModalComponent isVisible={this.state.isRegistartion}>
+                    <AddUserComponent
+                        user={user}
+                        saveUsersChanges={(user) => this.addUser(user)}
+                        closeModal={this.closeModal}
+                        enableGroup={false}
+                        enableAccess={false} />
+                </ModalComponent>
+
                 <form>
                     <div className="form-group">
                         <label for="inputEmail">{translation.EMAIL} {this.state.isWrongUserData && <span className="red">- {this.props.logInMassage}</span>}</label>
@@ -80,7 +84,7 @@ export default class LoginComponent extends Component {
 
                 </form>
                 <button type="submit" class="btn btn-primary mt-2" onClick={this.handleSubmit}>{translation.SUBMIT}</button>
-                <button type="submit" class="btn btn-link mt-2" onClick={this.registration}>{translation.REGISTRATION}</button>
+                <button type="submit" class="btn btn-link mt-2 ml-2" onClick={this.registration}>{translation.REGISTRATION}</button>
             </div>
         )
     }

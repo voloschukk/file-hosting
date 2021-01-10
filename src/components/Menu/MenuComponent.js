@@ -50,7 +50,7 @@ export default class MenuComponent extends Component {
     }
 
     render() {
-
+        
         let translation = texts()[getCookie("language")];
 
         const links = this.state.links.slice(0);
