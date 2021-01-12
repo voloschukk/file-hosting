@@ -25,10 +25,13 @@ export default class App extends Component {
     this.tryLogin = this.tryLogin.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
     this.changeLanguage = this.changeLanguage.bind(this);
+
+    if (getCookie("language") === null ) {
+      setCookie("language", "en");
+    }
   }
 
   componentDidMount() {
-    console.log("dfgdfgtdfrg");
     let userEmail = getCookie("userEmail");
     let userPassword = getCookie("userPassword");
     if (userEmail !== null && userPassword !== null) {
@@ -39,7 +42,6 @@ export default class App extends Component {
       this.setState({ language: language});
       setCookie("language", language);
     }
-
   }
 
   tryLogin = (userEmail, userPassword) => {
