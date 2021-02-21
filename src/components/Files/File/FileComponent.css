@@ -11,6 +11,10 @@
   padding: 5px;
 }
 
+.checked{
+  background-color: lightblue;
+}
+
 .tiles-name-row-noedit {
   height: 31px;
   width: 100%;

@@ -1,49 +1,82 @@
 .custom-file-label::after {
-    content: "" !important;
-    width: 40px;
-    background-image: url(https://img.icons8.com/ultraviolet/30/000000/upload-2--v1.png) ;
-    background-repeat: no-repeat;
-    background-position: center;
-  }
-
-.filecontainer{
-    width: 100px;
+  content: "" !important;
+  width: 40px;
+  background-image: url(https://img.icons8.com/ultraviolet/30/000000/upload-2--v1.png);
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.user-data{
-    display: block;
-    height: 100% ;
+.filecontainer {
+  width: 100px;
 }
 
-.files-grid-tiles{
-    display: flex ;
-    flex-direction: row;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    width: 100%;
+.user-data {
+  display: block;
+  height: 100%;
 }
 
-.files-grid-details{
-    display: flex ;
-    flex-direction: column;
-    justify-content: flex-start;
-    flex-wrap: nowrap;
-    width: 100%;
+.files-grid-tiles {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.control-row{
-    height: 50px;
+.files-grid-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  width: 100%;
 }
 
-.path-row{
-    height: 21px;
+.control-row {
+  height: 50px;
 }
 
-.data-row{
-    height: calc(100% - 50px - 21px);
+.path-row {
+  height: 40px;
 }
 
-.flex-centre{
+.breadcrumb-item{
     display: flex;
     align-items: center;
+}
+
+.breadcrumb{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 2px;
+    margin-left: 5px;
+    height: 40px;
+}
+
+.data-row {
+  height: calc(100% - 50px - 40px);
+}
+
+.flex-centre {
+  display: flex;
+  align-items: center;
+}
+
+.pointer {
+  text-align: center;
+}
+
+.pointer:hover {
+  cursor: pointer;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  text-decoration: none;
+  color: #000000;
+}
+
+.up{
+  margin: 2px;
+  border: 1px;
 }

@@ -32,8 +32,11 @@ export default class FileComponent extends Component {
         this.setState({ renameFileId: id });
     }
 
-    checkFile(event) {
-        this.props.checkFile(event.target.id, event.target.checked);
+    checkFile(event, id, checked) {
+        // debugger
+        checked ? checked = false : checked = true;
+        event.stopPropagation();
+        this.props.checkFile(event, id, checked);
     }
 
     renameFile() {
@@ -51,7 +54,7 @@ export default class FileComponent extends Component {
         this.setState({ fileName: event.target.value });
     }
 
-    chageActiveFolder(event){
+    chageActiveFolder(event) {
         this.props.chageActiveFolder(event.target.id);
     }
 
@@ -74,7 +77,7 @@ export default class FileComponent extends Component {
         }
 
         // ----- transform fileDate
-        
+
         const fileDate = file.createDate.slice(0, 10)
 
         // ----- transform fileSize
@@ -89,14 +92,17 @@ export default class FileComponent extends Component {
         if (prefix === 2) { fileSize = fileSize.toFixed(1) + " " + translation.MB }
         if (prefix === 3) { fileSize = fileSize.toFixed(1) + " " + translation.GB }
 
+        let checkedClass = ""
+        if (file.checked) { checkedClass = " checked" }
+
         return (
             <>
                 {this.props.view === "tiles" &&
-                    <div className="tiles-main-container" >
-                        <input class="tiles-form-check" type="checkbox" id={file.id} onChange={this.checkFile} checked={file.checked} />
+                    <div className={"tiles-main-container" + checkedClass} onClick={(e) => this.checkFile(e, file.id, file.checked)} >
+                        {/* <input class="tiles-form-check" type="checkbox" id={file.id} onChange={this.checkFile} checked={file.checked} /> */}
                         <div className="tiles-icon">
                             {file.type === "file" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/40/000000/document--v2.png" />}
-                            {file.type === "folder" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/40/000000/live-folder.png" id={file.id} onDoubleClick={this.chageActiveFolder}/>}
+                            {file.type === "folder" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/40/000000/live-folder.png" id={file.id} onDoubleClick={this.chageActiveFolder}  />}
                         </div>
                         {this.state.renameFileId.toString() !== file.id.toString() &&
                             <div className="tiles-name-row-noedit">
@@ -128,11 +134,11 @@ export default class FileComponent extends Component {
                     </div>
                 }
                 {this.props.view === "details" &&
-                    <div className="details-main-container">
-                        <input class="details-form-check" type="checkbox" id={file.id} onChange={this.checkFile} checked={file.checked} />
+                    <div className={"details-main-container" + checkedClass} onClick={(e) => this.checkFile(e, file.id, file.checked)} >
+                        {/* <input class="details-form-check" type="checkbox" id={file.id} onChange={this.checkFile} checked={file.checked} /> */}
                         <div className="details-icon">
                             {file.type === "file" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/15/000000/document--v2.png" />}
-                            {file.type === "folder" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/15/000000/live-folder.png" id={file.id} onDoubleClick={this.chageActiveFolder}/>}
+                            {file.type === "folder" && <img className="m-2" alt="File" src="https://img.icons8.com/ultraviolet/15/000000/live-folder.png" id={file.id} checked={file.checked} onDoubleClick={this.chageActiveFolder} />}
                         </div>
                         {this.state.renameFileId.toString() !== file.id.toString() &&
                             <div className="details-items-name">

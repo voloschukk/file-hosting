@@ -30,7 +30,8 @@ export default class FilesComponent extends Component {
         view: getView(),
         allCheked: false,
         sortBy: "name",
-        sortDirection: "ascending"
+        sortDirection: "ascending",
+        lastCheckedItem: 0
     }
 
     componentDidMount() {
@@ -67,10 +68,33 @@ export default class FilesComponent extends Component {
         return files;
     }
 
-    checkFile(id, checked) {
+    checkFile(event, id, checked) {
+        // debugger
         let files = this.state.files;
+        if (event.ctrlKey === false && event.shiftKey === false) {
+            files.forEach((file) => { file.checked = false; });
+        }
+
         files.forEach((file) => { if (file.id === Number(id)) { file.checked = checked; } });
-        this.setState({ files: files });
+        let lastCheckedItem = files.findIndex(file => file.id === Number(id));
+
+        if (event.shiftKey === true) {
+            let start0 = lastCheckedItem < this.state.lastCheckedItem ? lastCheckedItem : this.state.lastCheckedItem;
+            let end0 = lastCheckedItem > this.state.lastCheckedItem ? lastCheckedItem : this.state.lastCheckedItem;
+            for (let i = start0; i <= end0; i++) {
+                files[i].checked = true;
+            }
+            lastCheckedItem = this.state.lastCheckedItem;
+        }
+
+        this.setState({ files: files, allCheked: false, lastCheckedItem: lastCheckedItem });
+    }
+
+    cleanChecked(){
+        debugger
+        let files = this.state.files;
+        files.forEach((file) => { file.checked = false; });
+        this.setState({ files: files, allCheked: false });
     }
 
     checkAllFiles(event) {
@@ -100,7 +124,7 @@ export default class FilesComponent extends Component {
     }
 
     changeSort(event, necessary = false) {
-        
+
         if (event.target.nodeName !== "IMG") {
 
             let files = this.state.files;
@@ -168,13 +192,21 @@ export default class FilesComponent extends Component {
     }
 
     getParent(folderId) {
-
-        if (folderId === 0) {
-            return "../";
+        let translation = texts()[getCookie("language")];
+        let folderIdPath = [];
+        while (folderId) {
+            let obj = {};
+            obj.name = getFiles(this.props.user.id, this.props.isTrash).find(item => item.id === folderId).name.toString();
+            obj.id = folderId;
+            obj.classActive = "";
+            if (folderId === this.state.activeFolder) { obj.classActive = " disabled" };
+            folderIdPath.unshift(obj);
+            folderId = getFiles(this.props.user.id, this.props.isTrash).find(item => item.id === folderId).parent;
         }
-        else {
-            return this.getParent(getFiles(this.props.user.id, this.props.isTrash).find(item => item.id === folderId).parent) + " " + getFiles(this.props.user.id, this.props.isTrash).find(item => item.id === folderId).name.toString() + " /"
-        }
+        let obj = { name: translation.MY_DATA, id: 0, classActive: "" };
+        if (0 === this.state.activeFolder) { obj.classActive = " disabled" };
+        folderIdPath.unshift(obj);
+        return folderIdPath;
     }
 
     addFolder() {
@@ -198,22 +230,27 @@ export default class FilesComponent extends Component {
                     view={this.state.view}
                     enableRenameFile={this.props.enableRenameFile}
                     renameFile={(file) => this.renameFile(file)}
-                    checkFile={(id, checked) => this.checkFile(id, checked)}
+                    checkFile={(event, id, checked) => this.checkFile(event, id, checked)}
                     chageActiveFolder={(id) => this.chageActiveFolder(id)}
 
                 />
             );
         }
 
-        let path = "_";
-        if (this.props.enablePath) path = this.getParent(this.state.activeFolder);
+        let path = "";
+        if (this.props.enablePath) {
+            path = this.getParent(this.state.activeFolder).map((fold) =>
+                <li class="breadcrumb-item" id={fold.id}><a className={"pointer" + fold.classActive} id={fold.id} onClick={() => this.chageActiveFolder(fold.id)} >{fold.name}</a></li>
+            );
+
+        }
 
         let mark = <img alt="!" src="https://img.icons8.com/ultraviolet/15/000000/checkmark--v1.png" onclick="return false" />;
 
         const filesGrid = this.state.view === "tiles" ? "files-grid-tiles" : "files-grid-details";
 
         return (
-            <div className="container user-data">
+            <div className="container user-data" onClick={() => this.cleanChecked()}>
                 <div className="row control-row">
                     <div className="col col-1 flex-centre">
                         <div class="form-check">
@@ -221,11 +258,7 @@ export default class FilesComponent extends Component {
                             <label class="form-check-label" for="defaultCheck1">{translation.ALL}</label>
                         </div>
                     </div>
-                    <div className="col col-1 flex-centre">
-                        {this.props.enablePath && <button class="btn btn-outline-primary" type="button" title={translation.UP} onClick={this.goBackFolder}>
-                            <img alt="view" src="https://img.icons8.com/ultraviolet/20/000000/upload-to-ftp.png" />
-                        </button>}
-                    </div>
+                    <div className="col col-1 flex-centre"></div>
                     <div className="col col-1 flex-centre">
                         {this.props.enablePath && <button class="btn btn-outline-primary" type="button" title={translation.NEW_FOLDER} onClick={this.addFolder}>
                             <img alt="view" src="https://img.icons8.com/ultraviolet/20/000000/add-folder.png" />
@@ -298,7 +331,15 @@ export default class FilesComponent extends Component {
                     </div>
                 </div>
                 <div className="row path-row">
-                    {path}
+                    {this.props.enablePath &&
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <button class="btn btn-outline-light mr-2 up" type="button" title={translation.UP} onClick={this.goBackFolder}>
+                                    <img alt="up folder" src="https://img.icons8.com/ultraviolet/20/000000/up--v1.png" />
+                                </button>
+                                {path}
+                            </ol>
+                        </nav>}
                 </div>
                 <div className="row data-row">
                     {this.props.enableAddFile &&
